@@ -1,0 +1,91 @@
+body {
+  margin: 0px !important;
+  font-family: "Poppins", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+.login-wrap {
+  width: 100%;
+  height: 100%;
+}
+.set-bg {
+  background-image: url(assets/login-bg.jpg);
+  height: 100vh;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-size: cover;
+}
+
+.wrapper-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.set-wrap {
+  background-color: #ffffff;
+  padding: 1rem;
+  padding-bottom: 4rem;
+  border-radius: 10px;
+  box-shadow: 0px 10px 15px -3px rgb(0 0 0 / 58%);
+  color: #060606;
+  width: 23rem;
+}
+
+.close-btn-sec {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  cursor: pointer;
+}
+
+.sign-in-heading {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+.signin-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 10px;
+  border-radius: 15px;
+  border: 1px solid #d6d6d6;
+  cursor: pointer;
+}
+.forgot-pass {
+  font-size: 13px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+}
+
+label {
+  margin-bottom: 0.5rem;
+  font-size: 13px;
+}
+
+.no-acc {
+  display: flex;
+  font-size: 13px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+}
+
+.sign-sec {
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ip-sec {
+  margin-bottom: 1rem;
+}
+
+input {
+  border: none;
+  border-radius: 5px;
+  border: 1px solid grey;
+  width: 95%;
+  padding: 8px;
+}
