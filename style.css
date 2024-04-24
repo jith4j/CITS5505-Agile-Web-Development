@@ -89,3 +89,8 @@ input {
   width: 95%;
   padding: 8px;
 }
+
+/* To hide and show sign-up and sign-in section */
+.hide {
+  display: none;
+}
