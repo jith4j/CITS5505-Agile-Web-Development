@@ -9,3 +9,7 @@ def landing_page():
 @main.route("/success")
 def success():
     return render_template('success.html')
+
+@main.route("/profile")
+def profile():
+    return render_template('profile.html')
