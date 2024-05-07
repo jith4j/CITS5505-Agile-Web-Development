@@ -1,15 +1,15 @@
-from flask import Blueprint, render_template
+from flask import render_template, flash, redirect, url_for
+from app import app
 
-main = Blueprint('main', __name__)
-
-@main.route("/")
-def landing_page():
+@app.route('/')
+@app.route('/index')
+def index():
     return render_template('index.html')
 
-@main.route("/success")
+@app.route("/success")
 def success():
     return render_template('success.html')
 
-@main.route("/profile")
+@app.route("/profile")
 def profile():
     return render_template('profile.html')
