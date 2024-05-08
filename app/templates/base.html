@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    {% if title %}
+    <title>{{ title }} - Microblog</title>
+    {% else %}
+    <title>Welcome to Microblog</title>
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="nav-bar">
+        <div class="heading">
+            <img src="../static/assets/logo.png" alt="" class="logo">
+            <img src="../static/assets/logo-word.png" alt="" class="logo">
+        </div>
+        <div class="nav-options">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="">Login</a>
+            <a href="">Profile</a>
+            <a href="">Explore</a>
+            <a href="">Logout</a>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</body>
+
+</html>
