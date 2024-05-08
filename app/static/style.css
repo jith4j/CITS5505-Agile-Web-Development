@@ -141,21 +141,4 @@ header {
 
 .profile-details {
   display: flex;
-  flex-direction: column;
-}
-
-.username {
-  color: #666;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.email {
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.password {
-  color: #666;
-  margin-bottom: 5px;
-}
+  flex-direct

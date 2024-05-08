@@ -14,5 +14,4 @@ def success():
     return render_template('success.html')
 
 @app.route("/profile")
-def profile():
-    return render_template('profile.html')
+def 
