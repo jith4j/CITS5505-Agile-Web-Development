@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+
+<head>
+    {% if title %}
+    <title>{{ title }} - LLM Forum</title>
+    {% else %}
+    <title>Welcome to LLM Forum</title>
+    {% endif %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div>
+        LLM Forum:
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('success') }}">Login</a>
+        <a href="{{ url_for('success') }}">Logout</a>
+    </div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</body>
+
+</html>
