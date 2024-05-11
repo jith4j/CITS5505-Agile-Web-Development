@@ -32,7 +32,7 @@ class Question(db.Model):
     author: so.Mapped[User] = so.relationship(back_populates='posts')
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Question{}>'.format(self.question)
     
 @login.user_loader
 def load_user(id):
