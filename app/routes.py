@@ -4,7 +4,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User
+from app.models import User, Question
 
 @app.route('/')
 @app.route('/index')
@@ -34,7 +34,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('home')
+            next_page = url_for('home', username=user.username)
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -57,6 +57,17 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/home')
-def home():
-    return render_template('home.html', username='Jerry')
+@app.route('/home/<username>')
+@login_required
+def home(username):
+    ques_list = []
+    user = db.first_or_404(sa.select(User.username).where(User.username == username))
+    query = sa.select(User)
+    users = db.session.scalars(query).all()
+    for u in users:
+        qu = sa.select(Question).where(Question.author==u)
+        ques = db.session.scalars(qu).all()
+        for q in ques:
+            ques_list.append({'author': u.username, 'body': q.question})
+
+    return render_template('home.html', username=user, ques=ques_list)
