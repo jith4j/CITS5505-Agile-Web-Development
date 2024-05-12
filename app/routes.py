@@ -5,6 +5,15 @@ from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app.models import User
+from flask import request, jsonify
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import os
+import random
+import string
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 @app.route('/')
 @app.route('/index')
@@ -56,3 +65,32 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/forgotPassword', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    email = data.get('email')
+    if not email:
+        return jsonify({'error': 'Email is required'}), 400
+
+    # Generate a random 6-digit OTP
+    otp = ''.join(random.choices(string.digits, k=6))
+
+    # Set up the MIME message
+    message = MIMEMultipart()
+    message['From'] = os.getenv('SENDGRID_SENDER_EMAIL')
+    message['To'] = email
+    message['Subject'] = 'Your OTP for Password Reset'
+    message.attach(MIMEText(f"<strong>Your OTP is: {otp}</strong>", 'html'))
+
+    try:
+        with smtplib.SMTP('smtp.sendgrid.net', 587) as server:
+            server.starttls()  # Secure the connection
+            server.login('apikey', os.getenv('SENDGRID_API_KEY'))
+            server.send_message(message)
+        return jsonify({'message': 'OTP sent successfully', 'otp': otp}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
