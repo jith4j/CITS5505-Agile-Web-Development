@@ -1,1 +1,5 @@
 FLASK_APP=run.py
+
+SENDGRID_API_KEY='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'
+
+SENDGRID_SENDER_EMAIL='vishnuvijayr1@gmail.com'
