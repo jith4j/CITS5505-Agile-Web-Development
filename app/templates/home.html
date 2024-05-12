@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home">
+    <div class="home-container">
+        <h1 class="home-heading">Welcome to Our Forum {{ username }}!</h1>
+        <p class="home-msg">This is you home page and below are all the questions we have</p>
+        <a href="{{ url_for('success') }}" class="btn">Get Started</a>
+    </div>
+</div>
+{% endblock %}
