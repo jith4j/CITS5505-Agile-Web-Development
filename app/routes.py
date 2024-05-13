@@ -29,7 +29,7 @@ def profile():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('forum'))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.scalar(
@@ -40,7 +40,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('home', username=user.username)
+            next_page = url_for('forum', username=user.username)
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -92,9 +92,9 @@ def forgot_password():
 if __name__ == '__main__':
     app.run(debug=True)
 
-@app.route('/home/<username>', methods=['GET', 'POST'])
+@app.route('/forum/<username>', methods=['GET', 'POST'])
 @login_required
-def home(username):
+def forum(username):
     if current_user.username != username:
         return "Unauthorized access", 403
     user = db.session.scalar(sa.select(User).where(User.username == username))
@@ -107,7 +107,7 @@ def home(username):
             question = Question(question=question_text, author=current_user)
             db.session.add(question)
             db.session.commit()
-            return redirect(url_for('home', username=username))
+            return redirect(url_for('forum', username=username))
 
     ques_list = []
     query = sa.select(User)
@@ -118,4 +118,4 @@ def home(username):
         for q in ques:
             ques_list.append({'author': u.username, 'body': q.question})
 
-    return render_template('home.html', username=user.username, ques=ques_list)
+    return render_template('forum.html', username=user.username, ques=ques_list)

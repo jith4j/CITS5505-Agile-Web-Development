@@ -5,7 +5,7 @@
     <h2>Welcome, {{ username }}!</h2>
 
     <h3>Ask a Question</h3>
-    <form action="{{ url_for('home', username=username) }}" method="post">
+    <form action="{{ url_for('forum', username=username) }}" method="post">
         <div class="form-group">
             <label for="question">Your Question:</label>
             <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
