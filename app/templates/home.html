@@ -1,15 +1,31 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="home">
-    <div class="home-container">
-        <h1 class="home-heading">Welcome to Our Forum {{ username }}!</h1>
-        <p class="home-msg">This is you home page and below are all the questions we have</p>
-        <hr>
+<div class="container">
+    <h2>Welcome, {{ username }}!</h2>
+
+    <h3>Ask a Question</h3>
+    <form action="{{ url_for('home', username=username) }}" method="post">
+        <div class="form-group">
+            <label for="question">Your Question:</label>
+            <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post Question</button>
+    </form>
+
+    <hr>
+
+    <h3>Forum</h3>
+    {% if ques %}
+    <ul class="list-group">
         {% for q in ques %}
-        <p>
-            {{ q.author }} says: <b>{{ q.body }}</b>
-        </p>
+        <li class="list-group-item">
+            <strong>{{ q.author }}:</strong> {{ q.body }}
+        </li>
         {% endfor %}
-    </div>
+    </ul>
+    {% else %}
+    <p>No questions found.</p>
+    {% endif %}
 </div>
 {% endblock %}

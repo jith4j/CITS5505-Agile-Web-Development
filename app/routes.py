@@ -1,11 +1,10 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from urllib.parse import urlsplit
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app.models import User, Question
-from flask import request, jsonify
 import os
 import random
 import string
@@ -93,17 +92,30 @@ def forgot_password():
 if __name__ == '__main__':
     app.run(debug=True)
 
-@app.route('/home/<username>')
+@app.route('/home/<username>', methods=['GET', 'POST'])
 @login_required
 def home(username):
+    if current_user.username != username:
+        return "Unauthorized access", 403
+    user = db.session.scalar(sa.select(User).where(User.username == username))
+    if user is None:
+        return "User not found", 404
+
+    if request.method == 'POST':
+        question_text = request.form.get('question')
+        if question_text:
+            question = Question(question=question_text, author=current_user)
+            db.session.add(question)
+            db.session.commit()
+            return redirect(url_for('home', username=username))
+
     ques_list = []
-    user = db.first_or_404(sa.select(User.username).where(User.username == username))
     query = sa.select(User)
     users = db.session.scalars(query).all()
     for u in users:
-        qu = sa.select(Question).where(Question.author==u)
+        qu = sa.select(Question).where(Question.author == u)
         ques = db.session.scalars(qu).all()
         for q in ques:
             ques_list.append({'author': u.username, 'body': q.question})
 
-    return render_template('home.html', username=user, ques=ques_list)
+    return render_template('home.html', username=user.username, ques=ques_list)
