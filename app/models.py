@@ -8,10 +8,11 @@ from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
-    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
+    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True, nullable=False)
+    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True, nullable=False)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    posts: so.WriteOnlyMapped['Question'] = so.relationship(back_populates='author')
+    question_posts: so.WriteOnlyMapped['Question'] = so.relationship(back_populates='author')
+    answer_posts: so.WriteOnlyMapped['Answer'] = so.relationship(back_populates='author')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -24,15 +25,31 @@ class User(UserMixin, db.Model):
     
 class Question(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    question: so.Mapped[str] = so.mapped_column(sa.String(140))
+    question: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
     timestamp: so.Mapped[datetime] = so.mapped_column(
-        index=True, default=lambda: datetime.now(timezone.utc))
+        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
-    author: so.Mapped[User] = so.relationship(back_populates='posts')
+    author: so.Mapped[User] = so.relationship(back_populates='question_posts')
+    answers: so.WriteOnlyMapped['Answer'] = so.relationship(back_populates='question')
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Question{}>'.format(self.question)
+    
+class Answer(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    answer: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
+                                               index=True)
+    question_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Question.id),
+                                               index=True)
+    author: so.Mapped[User] = so.relationship(back_populates='answer_posts')
+    question: so.Mapped[Question] = so.relationship(back_populates='answers')
+
+    def __repr__(self):
+        return '<Answer{}>'.format(self.answer)
     
 @login.user_loader
 def load_user(id):
