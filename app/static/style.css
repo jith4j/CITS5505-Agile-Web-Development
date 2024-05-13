@@ -25,9 +25,15 @@ a {
   align-items: center;
 }
 
-.logo {
-  max-height: fit-content;
-  width: 40%;
+.logo1 {
+  width: 5rem;
+  height: 4rem;
+  padding-left: 10px;
+}
+
+.logo2 {
+  width: 8rem;
+  height: 4rem;
   padding-left: 10px;
 }
 
