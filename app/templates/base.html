@@ -11,16 +11,20 @@
 </head>
 
 <body>
-    <div>
-        LLM Forum:
-        <a href="{{ url_for('index') }}">Home</a>
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
-        {% else %}
-        <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
+    <div class="nav-bar">
+        <div class="heading">
+            <img src="../static/assets/logo.png" alt="" class="logo">
+            <img src="../static/assets/logo-word.png" alt="" class="logo">
+        </div>
+        <div class="nav-options">
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+        </div>
     </div>
-    <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
