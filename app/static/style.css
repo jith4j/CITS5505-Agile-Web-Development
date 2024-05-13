@@ -26,6 +26,7 @@ a {
 }
 
 .logo {
+  max-height: fit-content;
   width: 40%;
   padding-left: 10px;
 }
