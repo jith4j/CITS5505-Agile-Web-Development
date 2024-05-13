@@ -29,7 +29,7 @@ def profile():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('forum'))
+        return redirect(url_for('forum', username=user.username))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.scalar(
