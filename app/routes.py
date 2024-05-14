@@ -29,7 +29,7 @@ def profile():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('forum', username=user.username))
+        return redirect(url_for('forum', username=current_user.username))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.scalar(
@@ -116,7 +116,7 @@ def forum(username):
         qu = sa.select(Question).where(Question.author == u)
         ques = db.session.scalars(qu).all()
         for q in ques:
-            ques_list.append({'author': u.username, 'body': q.question, 'id': q.id})
+            ques_list.append({'author': u.username, 'body': q.question, 'timestamp': q.timestamp, 'id': q.id})
 
     return render_template('forum.html', username=user.username, ques=ques_list)
 
