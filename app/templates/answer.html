@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h3>Answers for: {{ question }}</h3>
+    
+    {% if ans %}
+        <ul class="list-group">
+            {% for a in ans %}
+            <li class="list-group-item">
+                <strong>{{ a.answer }}</strong>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <p>No answers found.</p>
+    {% endif %}
+</div>
+{% endblock %}

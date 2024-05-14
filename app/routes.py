@@ -4,7 +4,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User, Question
+from app.models import User, Question, Answer
 import os
 import random
 import string
@@ -116,6 +116,16 @@ def forum(username):
         qu = sa.select(Question).where(Question.author == u)
         ques = db.session.scalars(qu).all()
         for q in ques:
-            ques_list.append({'author': u.username, 'body': q.question})
+            ques_list.append({'author': u.username, 'body': q.question, 'id': q.id})
 
     return render_template('forum.html', username=user.username, ques=ques_list)
+
+@app.route('/answer/<qid>', methods=['GET', 'POST'])
+@login_required
+def answer(qid):
+    ans_list=[]
+    ans=db.session.scalars(sa.select(Answer).where(Answer.question_id==qid)).all()
+    ques = db.session.get(Question, qid)
+    for a in ans:
+        ans_list.append({'answer':a.answer})
+    return render_template('answer.html', ans=ans_list, question=ques.question)

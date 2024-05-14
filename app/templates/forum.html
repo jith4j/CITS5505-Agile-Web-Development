@@ -20,7 +20,7 @@
     <ul class="list-group">
         {% for q in ques %}
         <li class="list-group-item">
-            <strong>{{ q.author }}:</strong> {{ q.body }}
+            <a href="{{ url_for('answer', qid=q.id) }}"> <strong>{{ q.author }}:</strong> {{ q.body }} </a>
         </li>
         {% endfor %}
     </ul>
