@@ -66,16 +66,21 @@ a {
 .btn {
   display: inline-block;
   background-color: #007bff;
-  color: #fff;
+  color: white;
   text-decoration: none;
   margin: 10px 0;
   padding: 10px 20px;
+  border: none;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
 .btn:hover {
   background-color: #0056b3;
+}
+
+.btn a {
+  color: white;
 }
 
 /* Forum page */
@@ -104,7 +109,7 @@ a {
 }
 
 #submit {
-  background-color: blue;
+  background-color: #007bff;
   padding: 10px 20px;
   color: white;
   text-align: center;
@@ -240,4 +245,33 @@ header {
 .password {
   color: #666;
   margin-bottom: 5px;
+}
+
+/* Login page */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 380px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
 }
