@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-
-<body>
+{% extends "navbar.html" %}
+{% block content %}
     <div class="profile-container">
-        <header>
-            <div class="logo-pic">
-                <img src="../static/assets/site-logo.png" alt="Site Logo">
-            </div>
-            <div class="logo">Site Name</div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search">
-            </div>
-            <div class="avatar-pic">
-                <img src="../static/assets/img_avatar.png" alt="Avatar"> 
-            </div>
-        </header>
-        <div class="content">
+        <section class="profile-top-container">
             <div class="profile">
                 <div class="profile-pic">
                     <img src="../static/assets/img_avatar.png" alt="Avatar">
                 </div>
                 <div class="profile-details">
-                    <div class="username">username</div>
-                    <div class="email">someone@example.com</div>
-                    <div class="password">***********</div>
+                    <div class="username">{{ user.username }}</div>
+                    <div class="email">{{ user.email }}</div>
+                    <!-- Placeholder for masked password -->
+                    <div class="password">***********</div> 
                 </div>
             </div>
+        </section>
+        <!-- https://codepen.io/Lewitje/pen/doJRBX/ -->
+        <div class="profile-body">
+            <ul class="profile-tabs">
+                <li class="active">My Questions</li>
+                <li>My Answers</li>
+            </ul>
+            <ul class="profile-tabs-content">
+                <div>
+                    {% for q in ques %}
+                    <p>{{ q.question }}</p>
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for a in ans %}
+                    <p>{{ a.answer }}</p>
+                    {% endfor %}
+                </div>
+            </ul>
         </div>
     </div>
-</body>
-</html>
+    {% endblock %}>

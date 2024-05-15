@@ -22,11 +22,6 @@ def index():
 def success():
     return render_template('success.html')
 
-@app.route("/profile")
-@login_required
-def profile():
-    return render_template('profile.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -170,3 +165,12 @@ def add_answer(qid):
 
     ans_list = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
     return render_template('answer.html', ans_list=ans_list, question=question)
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    curruser = current_user
+    ques_list = db.session.scalars(curruser.question_posts.select()).all()
+    ans_list = db.session.scalars(curruser.answer_posts.select()).all()
+    return render_template('profile.html', user=curruser, ques=ques_list, ans= ans_list)
