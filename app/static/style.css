@@ -168,6 +168,32 @@ textarea {
   margin-bottom: 0;
 }
 
+.forum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sorting-options {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sort {
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-sort.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
 /* Styling for Profile Page */
 .profile-container {
   display: flex;

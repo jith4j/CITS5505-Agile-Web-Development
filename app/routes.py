@@ -11,6 +11,7 @@ import string
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import humanize
 
 @app.route('/')
 @app.route('/index')
@@ -101,6 +102,8 @@ def forum(username):
     if user is None:
         return "User not found", 404
 
+    sort_order = request.args.get('sort', 'desc')
+
     if request.method == 'POST':
         question_text = request.form.get('question')
         if question_text:
@@ -113,12 +116,15 @@ def forum(username):
     query = sa.select(User)
     users = db.session.scalars(query).all()
     for u in users:
-        qu = sa.select(Question).where(Question.author == u)
+        if sort_order == 'asc':
+            qu = sa.select(Question).where(Question.author == u).order_by(Question.timestamp.asc())
+        else:
+            qu = sa.select(Question).where(Question.author == u).order_by(Question.timestamp.desc())
         ques = db.session.scalars(qu).all()
         for q in ques:
             ques_list.append({'author': u.username, 'body': q.question, 'timestamp': q.timestamp, 'id': q.id})
 
-    return render_template('forum.html', username=user.username, ques=ques_list)
+    return render_template('forum.html', username=user.username, ques=ques_list, sort=sort_order, humanize=humanize)
 
 @app.route('/answer/<qid>', methods=['GET', 'POST'])
 @login_required
