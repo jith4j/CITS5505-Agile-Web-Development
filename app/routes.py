@@ -98,6 +98,7 @@ if __name__ == '__main__':
 def forum(username):
     if current_user.username != username:
         return "Unauthorized access", 403
+
     user = db.session.scalar(sa.select(User).where(User.username == username))
     if user is None:
         return "User not found", 404
@@ -113,16 +114,21 @@ def forum(username):
             return redirect(url_for('forum', username=username))
 
     ques_list = []
-    query = sa.select(User)
-    users = db.session.scalars(query).all()
-    for u in users:
-        if sort_order == 'asc':
-            qu = sa.select(Question).where(Question.author == u).order_by(Question.timestamp.asc())
-        else:
-            qu = sa.select(Question).where(Question.author == u).order_by(Question.timestamp.desc())
-        ques = db.session.scalars(qu).all()
-        for q in ques:
-            ques_list.append({'author': u.username, 'body': q.question, 'timestamp': q.timestamp, 'id': q.id})
+
+    if sort_order == 'asc':
+        query = sa.select(Question).order_by(Question.timestamp.asc())
+    else:
+        query = sa.select(Question).order_by(Question.timestamp.desc())
+
+    ques = db.session.scalars(query).all()
+
+    for q in ques:
+        ques_list.append({
+            'author': q.author.username,
+            'body': q.question,
+            'timestamp': q.timestamp,
+            'id': q.id
+        })
 
     return render_template('forum.html', username=user.username, ques=ques_list, sort=sort_order, humanize=humanize)
 
