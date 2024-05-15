@@ -136,6 +136,15 @@ def answer(qid):
         ans_list.append({'answer':a.answer})
     return render_template('answer.html', ans=ans_list, question=ques)
 
+@app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
+@login_required
+def latestAnswer(qid):
+    ans_list=[]
+    ans=db.session.scalar(sa.select(Answer).where(Answer.question_id==qid).order_by(Answer.timestamp.desc()))
+    if ans:
+        ans_list=[{'answer': ans.answer}]
+    return jsonify(ans_list)
+
 @app.route('/addAnswer/<qid>', methods=['GET', 'POST'])
 @login_required
 def add_answer(qid):
