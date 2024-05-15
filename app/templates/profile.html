@@ -1,27 +1,16 @@
 {% extends "navbar.html" %}
 {% block content %}
     <div class="profile-container">
-        <header>
-            <div class="logo-pic">
-                <img src="../static/assets/site-logo.png" alt="Site Logo">
-            </div>
-            <div class="logo">Site Name</div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search">
-            </div>
-            <div class="avatar-pic">
-                <img src="../static/assets/img_avatar.png" alt="Avatar"> 
-            </div>
-        </header>
         <div class="content">
             <div class="profile">
                 <div class="profile-pic">
                     <img src="../static/assets/img_avatar.png" alt="Avatar">
                 </div>
                 <div class="profile-details">
-                    <div class="username">username</div>
-                    <div class="email">someone@example.com</div>
-                    <div class="password">***********</div>
+                    <div class="username">{{ user.username }}</div>
+                    <div class="email">{{ user.email }}</div>
+                    <!-- Placeholder for masked password -->
+                    <div class="password">***********</div> 
                 </div>
             </div>
         </div>

@@ -21,11 +21,6 @@ def index():
 def success():
     return render_template('success.html')
 
-@app.route("/profile")
-@login_required
-def profile():
-    return render_template('profile.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -129,3 +124,9 @@ def answer(qid):
     for a in ans:
         ans_list.append({'answer':a.answer})
     return render_template('answer.html', ans=ans_list, question=ques.question)
+
+@app.route("/profile")
+@login_required
+def profile():
+    curruser = current_user
+    return render_template('profile.html', user=curruser)
