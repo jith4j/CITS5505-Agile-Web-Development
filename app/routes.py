@@ -128,4 +128,24 @@ def answer(qid):
     ques = db.session.get(Question, qid)
     for a in ans:
         ans_list.append({'answer':a.answer})
-    return render_template('answer.html', ans=ans_list, question=ques.question)
+    return render_template('answer.html', ans=ans_list, question=ques)
+
+@app.route('/addAnswer/<qid>', methods=['GET', 'POST'])
+@login_required
+def add_answer(qid):
+    question = db.session.get(Question, qid)
+    if not question:
+        return "Question not found", 404
+
+    if request.method == 'POST':
+        answer_text = request.form.get('answer')
+        if answer_text:
+            answer = Answer(answer=answer_text, author=current_user, question_id=qid)
+            print(qid)
+            db.session.add(answer)
+            db.session.commit()
+            flash('Your answer has been posted.')
+            return redirect(url_for('answer', qid=qid))
+
+    ans_list = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
+    return render_template('answer.html', ans_list=ans_list, question=question)
