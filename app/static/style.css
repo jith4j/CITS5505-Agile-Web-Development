@@ -142,6 +142,9 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 26rem;
+  overflow: auto;
+  padding: 0px 10px;
 }
 
 .question-card {
