@@ -21,9 +21,16 @@
                 <li>My Answers</li>
             </ul>
             <ul class="profile-tabs-content">
-                {% for q in ques %}
-                <p>{{ q.question }}</p>
-                {% endfor %}
+                <div>
+                    {% for q in ques %}
+                    <p>{{ q.question }}</p>
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for a in ans %}
+                    <p>{{ a.answer }}</p>
+                    {% endfor %}
+                </div>
             </ul>
         </div>
     </div>

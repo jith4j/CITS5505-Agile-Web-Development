@@ -130,4 +130,5 @@ def answer(qid):
 def profile():
     curruser = current_user
     ques_list = db.session.scalars(curruser.question_posts.select()).all()
-    return render_template('profile.html', user=curruser, ques=ques_list)
+    ans_list = db.session.scalars(curruser.answer_posts.select()).all()
+    return render_template('profile.html', user=curruser, ques=ques_list, ans= ans_list)

@@ -251,8 +251,11 @@ textarea {
   }
 }
 .profile-tabs-content {
+  display: flex;
+  flex-direction: row;
   background-color: white;
   padding-right: 40px;
+  align-items: center;
 }
 
 /* Login page */
