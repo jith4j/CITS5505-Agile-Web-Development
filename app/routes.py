@@ -129,4 +129,5 @@ def answer(qid):
 @login_required
 def profile():
     curruser = current_user
-    return render_template('profile.html', user=curruser)
+    ques_list = db.session.scalars(curruser.question_posts.select()).all()
+    return render_template('profile.html', user=curruser, ques=ques_list)

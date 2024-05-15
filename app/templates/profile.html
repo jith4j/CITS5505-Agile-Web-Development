@@ -15,11 +15,16 @@
             </div>
         </section>
         <!-- https://codepen.io/Lewitje/pen/doJRBX/ -->
-        <section class="profile-body">
+        <div class="profile-body">
             <ul class="profile-tabs">
                 <li class="active">My Questions</li>
                 <li>My Answers</li>
             </ul>
-        </section>
+            <ul class="profile-tabs-content">
+                {% for q in ques %}
+                <p>{{ q.question }}</p>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     {% endblock %}>
