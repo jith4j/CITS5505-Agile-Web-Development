@@ -11,6 +11,7 @@ import string
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import humanize
 
 @app.route('/')
 @app.route('/index')
@@ -37,7 +38,7 @@ def login():
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('forum', username=user.username)
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/logout')
 def logout():
@@ -92,9 +93,12 @@ if __name__ == '__main__':
 def forum(username):
     if current_user.username != username:
         return "Unauthorized access", 403
+
     user = db.session.scalar(sa.select(User).where(User.username == username))
     if user is None:
         return "User not found", 404
+
+    sort_order = request.args.get('sort', 'desc')
 
     if request.method == 'POST':
         question_text = request.form.get('question')
@@ -105,15 +109,23 @@ def forum(username):
             return redirect(url_for('forum', username=username))
 
     ques_list = []
-    query = sa.select(User)
-    users = db.session.scalars(query).all()
-    for u in users:
-        qu = sa.select(Question).where(Question.author == u)
-        ques = db.session.scalars(qu).all()
-        for q in ques:
-            ques_list.append({'author': u.username, 'body': q.question, 'timestamp': q.timestamp, 'id': q.id})
 
-    return render_template('forum.html', username=user.username, ques=ques_list)
+    if sort_order == 'asc':
+        query = sa.select(Question).order_by(Question.timestamp.asc())
+    else:
+        query = sa.select(Question).order_by(Question.timestamp.desc())
+
+    ques = db.session.scalars(query).all()
+
+    for q in ques:
+        ques_list.append({
+            'author': q.author.username,
+            'body': q.question,
+            'timestamp': q.timestamp,
+            'id': q.id
+        })
+
+    return render_template('forum.html', username=user.username, ques=ques_list, sort=sort_order, humanize=humanize)
 
 @app.route('/answer/<qid>', methods=['GET', 'POST'])
 @login_required
@@ -123,7 +135,37 @@ def answer(qid):
     ques = db.session.get(Question, qid)
     for a in ans:
         ans_list.append({'answer':a.answer})
-    return render_template('answer.html', ans=ans_list, question=ques.question)
+    return render_template('answer.html', ans=ans_list, question=ques)
+
+@app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
+@login_required
+def latestAnswer(qid):
+    ans_list=[]
+    ans=db.session.scalar(sa.select(Answer).where(Answer.question_id==qid).order_by(Answer.timestamp.desc()))
+    if ans:
+        ans_list=[{'answer': ans.answer}]
+    return jsonify(ans_list)
+
+@app.route('/addAnswer/<qid>', methods=['GET', 'POST'])
+@login_required
+def add_answer(qid):
+    question = db.session.get(Question, qid)
+    if not question:
+        return "Question not found", 404
+
+    if request.method == 'POST':
+        answer_text = request.form.get('answer')
+        if answer_text:
+            answer = Answer(answer=answer_text, author=current_user, question_id=qid)
+            print(qid)
+            db.session.add(answer)
+            db.session.commit()
+            flash('Your answer has been posted.')
+            return redirect(url_for('answer', qid=qid))
+
+    ans_list = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
+    return render_template('answer.html', ans_list=ans_list, question=question)
+
 
 @app.route("/profile")
 @login_required

@@ -1,6 +1,7 @@
 {% extends "navbar.html" %}
 
-{% block content %}
+{% block content %}\
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <div class="container">
     <div class="content-wrap">
         <h2 class="text-center">Welcome, {{ username }}!</h2>
@@ -16,25 +17,74 @@
             </form>
         </div>
         <hr>
-        <h3 class="text-center">Forum</h3>
+        <div class="forum-header">
+            <h3 class="text-center">Forum</h3>
+            <div class="sorting-options">
+                <a href="{{ url_for('forum', username=username, sort='asc') }}"
+                    class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
+                <a href="{{ url_for('forum', username=username, sort='desc') }}"
+                    class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
+            </div>
+        </div>
         {% if ques %}
-        <div class="question-cards">
+        <div class="question-cards" id="questionList">
             {% for q in ques %}
-            <a href="{{ url_for('answer', qid=q.id) }}">
-                <div class="question-card">
+            <div class="question-card" data-id="{{ q.id }}">
+                <a href="{{ url_for('answer', qid=q.id) }}">
                     <div class="wrap">
                         <p class="author"><strong>{{ q.author }}</strong></p>
-                        <p class="timestamp">{{ q.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
                     </div>
-
                     <p class="question-body">{{ q.body }}</p>
-            </a>
-        </div>
-        {% endfor %}
+                </a>
+                <div id="{{ q.id }}">
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>    
+        {% else %}
+        <p class="text-center">No questions found.</p>
+        {% endif %}
     </div>
-    {% else %}
-    <p class="text-center">No questions found.</p>
-    {% endif %}
 </div>
-</div>
+
+<script>
+$(document).ready(function() {
+    $('#questionList').on('mouseenter', '.question-card', function() {
+        console.log("Hovered over question card with ID:", $(this).data('id'));
+        var qid = $(this).data('id');
+        var container = $('#' + String(qid).trim()); // Access the container by dynamically created ID
+        if (container.is(':empty')) {
+            console.log("Container is empty, fetching answers...");
+            get_answers(qid, container);
+        }
+    }).on('mouseleave', '.question-card', function() {
+        var qid = $(this).data('id');
+        $('#' + String(qid).trim()).empty(); // Optionally clear the content
+        console.log("Cleared answers on mouse leave...");
+    });
+});
+
+function get_answers(qid, container) {
+    $.ajax({
+        url: '/latestAnswer/' + qid,
+        type: 'GET',
+        success: function(data) {
+            console.log("Data received for:", qid, data);
+            if (data.length > 0) {
+                var allAnswers = data.map(a => `<p>Answer: ${a.answer}</p>`).join('');
+                container.html(allAnswers);
+            } else {
+                container.html('<p>No answers found.</p>');
+            }
+        },
+        error: function() {
+            console.log("Error fetching data for:", qid);
+            container.html('<p>Error retrieving answers. Please try again.</p>');
+        }
+    });
+}
+
+</script>
 {% endblock %}
