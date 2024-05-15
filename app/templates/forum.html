@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set humanize = {'naturaltime': humanize.naturaltime} %}
 
 {% block content %}
 <div class="container">
@@ -16,7 +17,15 @@
             </form>
         </div>
         <hr>
-        <h3 class="text-center">Forum</h3>
+        <div class="forum-header">
+            <h3 class="text-center">Forum</h3>
+            <div class="sorting-options">
+                <a href="{{ url_for('forum', username=username, sort='asc') }}"
+                    class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
+                <a href="{{ url_for('forum', username=username, sort='desc') }}"
+                    class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
+            </div>
+        </div>
         {% if ques %}
         <div class="question-cards">
             {% for q in ques %}
@@ -24,17 +33,16 @@
                 <div class="question-card">
                     <div class="wrap">
                         <p class="author"><strong>{{ q.author }}</strong></p>
-                        <p class="timestamp">{{ q.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
                     </div>
-
                     <p class="question-body">{{ q.body }}</p>
+                </div>
             </a>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% else %}
+        <p class="text-center">No questions found.</p>
+        {% endif %}
     </div>
-    {% else %}
-    <p class="text-center">No questions found.</p>
-    {% endif %}
-</div>
 </div>
 {% endblock %}
