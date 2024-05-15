@@ -1,7 +1,7 @@
 {% extends "navbar.html" %}
 {% block content %}
     <div class="profile-container">
-        <div class="content">
+        <section class="profile-top-container">
             <div class="profile">
                 <div class="profile-pic">
                     <img src="../static/assets/img_avatar.png" alt="Avatar">
@@ -13,6 +13,13 @@
                     <div class="password">***********</div> 
                 </div>
             </div>
-        </div>
+        </section>
+        <!-- https://codepen.io/Lewitje/pen/doJRBX/ -->
+        <section class="profile-body">
+            <ul class="profile-tabs">
+                <li class="active">My Questions</li>
+                <li>My Answers</li>
+            </ul>
+        </section>
     </div>
     {% endblock %}>

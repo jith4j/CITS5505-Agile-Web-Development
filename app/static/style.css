@@ -176,6 +176,14 @@ textarea {
   padding-top: 40px;
 }
 
+.profile-top-container {
+  flex: 1;
+  display: flex;
+  width: 60%;
+  justify-content: center;
+  align-items: center;
+}
+
 .profile {
   display: flex;
   flex-direction: row;
@@ -218,12 +226,26 @@ textarea {
   margin-bottom: 5px;
 }
 
-.content {
+.profile-body {
   flex: 1;
   display: flex;
   width: 60%;
   justify-content: center;
   align-items: center;
+}
+
+.profile-tabs {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.profile-tabs > li {
+  width: 50%;
+  list-style: none;
+  text-align: center;
+  padding: 20px 20px 25px 20px;
+  cursor: pointer;
 }
 
 /* Login page */
