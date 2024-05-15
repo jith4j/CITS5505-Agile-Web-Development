@@ -84,6 +84,12 @@ a {
 }
 
 /* Forum page */
+.forum-wrapper {
+  width: 100%;
+  height: calc(100vh - 5rem);
+  overflow: auto;
+}
+
 .container {
   border: 1px solid #ccc;
   border-radius: 10px;

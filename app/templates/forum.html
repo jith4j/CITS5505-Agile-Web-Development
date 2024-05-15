@@ -1,89 +1,91 @@
 {% extends "navbar.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="content-wrap">
-        <h2 class="text-center">Welcome, {{ username }}!</h2>
-        <div class="contents-sec">
-            <h3>Ask a Question</h3>
-            <form action="{{ url_for('forum', username=username) }}" method="post">
-                <div class="form-group">
-                    <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
-                </div>
-                <div class="submit-btn">
-                    <button type="submit" class="btn" id="submit">Post Question</button>
-                </div>
-            </form>
-        </div>
-        <hr>
-        <div class="forum-header">
-            <h3 class="text-center">Forum</h3>
-            <div class="sorting-options">
-                <a href="{{ url_for('forum', username=username, sort='asc') }}"
-                    class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
-                <a href="{{ url_for('forum', username=username, sort='desc') }}"
-                    class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
-            </div>
-        </div>
-        {% if ques %}
-        <div class="question-cards" id="questionList">
-            {% for q in ques %}
-            <div class="question-card" data-id="{{ q.id }}">
-                <a href="{{ url_for('answer', qid=q.id) }}">
-                    <div class="wrap">
-                        <p class="author"><strong>{{ q.author }}</strong></p>
-                        <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
+<div class="forum-wrapper">
+    <div class="container">
+        <div class="content-wrap">
+            <h2 class="text-center">Welcome, {{ username }}!</h2>
+            <div class="contents-sec">
+                <h3>Ask a Question</h3>
+                <form action="{{ url_for('forum', username=username) }}" method="post">
+                    <div class="form-group">
+                        <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
                     </div>
-                    <p class="question-body">{{ q.body }}</p>
-                </a>
-                <div id="{{ q.id }}">
-
+                    <div class="submit-btn">
+                        <button type="submit" class="btn" id="submit">Post Question</button>
+                    </div>
+                </form>
+            </div>
+            <hr>
+            <div class="forum-header">
+                <h3 class="text-center">Forum</h3>
+                <div class="sorting-options">
+                    <a href="{{ url_for('forum', username=username, sort='asc') }}"
+                        class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
+                    <a href="{{ url_for('forum', username=username, sort='desc') }}"
+                        class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
                 </div>
             </div>
-            {% endfor %}
-        </div>    
-        {% else %}
-        <p class="text-center">No questions found.</p>
-        {% endif %}
+            {% if ques %}
+            <div class="question-cards" id="questionList">
+                {% for q in ques %}
+                <div class="question-card" data-id="{{ q.id }}">
+                    <a href="{{ url_for('answer', qid=q.id) }}">
+                        <div class="wrap">
+                            <p class="author"><strong>{{ q.author }}</strong></p>
+                            <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
+                        </div>
+                        <p class="question-body">{{ q.body }}</p>
+                    </a>
+                    <div id="{{ q.id }}">
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-center">No questions found.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 
 <script>
-$(document).ready(function() {
-    $('#questionList').on('mouseenter', '.question-card', function() {
-        console.log("Hovered over question card with ID:", $(this).data('id'));
-        var qid = $(this).data('id');
-        var container = $('#' + String(qid).trim()); // Access the container by dynamically created ID
-        if (container.is(':empty')) {
-            console.log("Container is empty, fetching answers...");
-            get_answers(qid, container);
-        }
-    }).on('mouseleave', '.question-card', function() {
-        var qid = $(this).data('id');
-        $('#' + String(qid).trim()).empty(); // Optionally clear the content
-        console.log("Cleared answers on mouse leave...");
-    });
-});
-
-function get_answers(qid, container) {
-    $.ajax({
-        url: '/latestAnswer/' + qid,
-        type: 'GET',
-        success: function(data) {
-            console.log("Data received for:", qid, data);
-            if (data.length > 0) {
-                var allAnswers = data.map(a => `<p>Answer: ${a.answer}</p>`).join('');
-                container.html(allAnswers);
-            } else {
-                container.html('<p>No answers found.</p>');
+    $(document).ready(function () {
+        $('#questionList').on('mouseenter', '.question-card', function () {
+            console.log("Hovered over question card with ID:", $(this).data('id'));
+            var qid = $(this).data('id');
+            var container = $('#' + String(qid).trim()); // Access the container by dynamically created ID
+            if (container.is(':empty')) {
+                console.log("Container is empty, fetching answers...");
+                get_answers(qid, container);
             }
-        },
-        error: function() {
-            console.log("Error fetching data for:", qid);
-            container.html('<p>Error retrieving answers. Please try again.</p>');
-        }
+        }).on('mouseleave', '.question-card', function () {
+            var qid = $(this).data('id');
+            $('#' + String(qid).trim()).empty(); // Optionally clear the content
+            console.log("Cleared answers on mouse leave...");
+        });
     });
-}
+
+    function get_answers(qid, container) {
+        $.ajax({
+            url: '/latestAnswer/' + qid,
+            type: 'GET',
+            success: function (data) {
+                console.log("Data received for:", qid, data);
+                if (data.length > 0) {
+                    var allAnswers = data.map(a => `<p>Answer: ${a.answer}</p>`).join('');
+                    container.html(allAnswers);
+                } else {
+                    container.html('<p>No answers found.</p>');
+                }
+            },
+            error: function () {
+                console.log("Error fetching data for:", qid);
+                container.html('<p>Error retrieving answers. Please try again.</p>');
+            }
+        });
+    }
 
 </script>
 {% endblock %}
