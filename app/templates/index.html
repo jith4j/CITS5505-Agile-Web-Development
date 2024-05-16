@@ -1,14 +1,16 @@
 {% extends "navbar.html" %}
 {% block content %}
-<div class="welcome">
-    <div class="welcome-container">
-        <h1>Welcome to Our Forum !</h1>
-        <p>We're glad you're here. Click the button below to get started.</p>
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('forum', username=current_user.username) }}" class="btn">Forum Page</a>
-        {% else %}
-        <a href="{{ url_for('login') }}" class="btn">Get Started</a>
-        {% endif %}
-    </div>
-</div>
+<main>
+    <section class="welcome">
+        <div class="welcome-container">
+            <h1>Welcome to Our Forum !</h1>
+            <p>We're glad you're here. Click the button below to get started.</p>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('forum', username=current_user.username) }}" class="btn">Forum Page</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn">Get Started</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
 {% endblock %}
