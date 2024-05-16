@@ -142,8 +142,8 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 26rem;
-  overflow: auto;
+  max-height: calc(100vh - 38rem);
+  overflow-y: auto;
   padding: 0px 10px;
 }
 
