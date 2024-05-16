@@ -37,9 +37,7 @@
                         </div>
                         <p class="question-body">{{ q.body }}</p>
                     </a>
-                    <div id="{{ q.id }}">
-
-                    </div>
+                    <div id="{{ q.id }}"></div>
                 </div>
                 {% endfor %}
             </div>
@@ -62,7 +60,7 @@
             }
         }).on('mouseleave', '.question-card', function () {
             var qid = $(this).data('id');
-            $('#' + String(qid).trim()).empty(); // Optionally clear the content
+            $('#' + String(qid).trim()).empty(); // Clear the content
             console.log("Cleared answers on mouse leave...");
         });
     });
