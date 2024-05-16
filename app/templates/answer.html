@@ -2,31 +2,33 @@
 
 {% block content %}
 
-<div class="container">
-    <h3>Answers for: {{ question.question }}</h3>
-    
-    {% if ans %}
+<main>
+    <section class="container">
+        <h3>Answers for: {{ question.question }}</h3>
+
+        {% if ans %}
         <ul class="list-group">
             {% for a in ans %}
             <li class="list-group-item">{{ a.answer }}</li>
             {% endfor %}
         </ul>
-    {% else %}
-    <p>No answers found.</p>
-    {% endif %}
+        {% else %}
+        <p>No answers found.</p>
+        {% endif %}
 
-    <!-- Form to add a new answer -->
-    <div class="mt-4">
-        <h4>Add Your Answer</h4>
-        
-        <form action="{{ url_for('add_answer', qid=question.id) }}" method="POST">
-            <div class="form-group">
-                <label for="answer">Your Answer</label>
-                <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-</div>
+        <!-- Form to add a new answer -->
+        <div class="mt-4">
+            <h4>Add Your Answer</h4>
+
+            <form action="{{ url_for('add_answer', qid=question.id) }}" method="POST">
+                <div class="form-group">
+                    <label for="answer">Your Answer</label>
+                    <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </section>
+</main>
 
 {% endblock %}
