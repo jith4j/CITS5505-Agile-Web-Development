@@ -1,52 +1,54 @@
 {% extends "navbar.html" %}
 
 {% block content %}
-<div class="forum-wrapper">
-    <div class="container">
-        <div class="content-wrap">
-            <h2 class="text-center">Welcome, {{ username }}!</h2>
-            <div class="contents-sec">
-                <h3>Ask a Question</h3>
-                <form action="{{ url_for('forum', username=username) }}" method="post">
-                    <div class="form-group">
-                        <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
-                    </div>
-                    <div class="submit-btn">
-                        <button type="submit" class="btn" id="submit">Post Question</button>
-                    </div>
-                </form>
-            </div>
-            <hr>
-            <div class="forum-header">
-                <h3 class="text-center">Forum</h3>
-                <div class="sorting-options">
-                    <a href="{{ url_for('forum', username=username, sort='asc') }}"
-                        class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
-                    <a href="{{ url_for('forum', username=username, sort='desc') }}"
-                        class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
-                </div>
-            </div>
-            {% if ques %}
-            <div class="question-cards" id="questionList">
-                {% for q in ques %}
-                <div class="question-card" data-id="{{ q.id }}">
-                    <a href="{{ url_for('answer', qid=q.id) }}">
-                        <div class="wrap">
-                            <p class="author"><strong>{{ q.author }}</strong></p>
-                            <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
+<main>
+    <div class="forum-wrapper">
+        <div class="container">
+            <div class="content-wrap">
+                <h2 class="text-center">Welcome, {{ username }}!</h2>
+                <div class="contents-sec">
+                    <h3>Ask a Question</h3>
+                    <form action="{{ url_for('forum', username=username) }}" method="post">
+                        <div class="form-group">
+                            <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
                         </div>
-                        <p class="question-body">{{ q.body }}</p>
-                    </a>
-                    <div id="{{ q.id }}"></div>
+                        <div class="submit-btn">
+                            <button type="submit" class="btn" id="submit">Post Question</button>
+                        </div>
+                    </form>
                 </div>
-                {% endfor %}
+                <hr>
+                <div class="forum-header">
+                    <h3 class="text-center">Forum</h3>
+                    <div class="sorting-options">
+                        <a href="{{ url_for('forum', username=username, sort='asc') }}"
+                            class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
+                        <a href="{{ url_for('forum', username=username, sort='desc') }}"
+                            class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
+                    </div>
+                </div>
+                {% if ques %}
+                <div class="question-cards" id="questionList">
+                    {% for q in ques %}
+                    <div class="question-card" data-id="{{ q.id }}">
+                        <a href="{{ url_for('answer', qid=q.id) }}">
+                            <div class="wrap">
+                                <p class="author"><strong>{{ q.author }}</strong></p>
+                                <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
+                            </div>
+                            <p class="question-body">{{ q.body }}</p>
+                        </a>
+                        <div id="{{ q.id }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-center">No questions found.</p>
+                {% endif %}
             </div>
-            {% else %}
-            <p class="text-center">No questions found.</p>
-            {% endif %}
         </div>
     </div>
-</div>
+</main>
 
 <script>
     $(document).ready(function () {
