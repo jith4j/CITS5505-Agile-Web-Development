@@ -170,6 +170,11 @@ hr {
   margin-bottom: 20px;
 }
 
+.forum-wrapper {
+  height: 90vh;
+  overflow: auto;
+}
+
 .sorting-options {
   display: flex;
   gap: 10px;
