@@ -1,53 +1,55 @@
 {% extends "navbar.html" %}
 
 {% block content %}
-<div class="wrapper">
-    <div class="login-container ">
-        <h2 class="login-headings">Register</h2>
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                <div class="form-label">
-                    {{ form.username.label }}<br>
+<main>
+    <section class="wrapper">
+        <div class="login-container">
+            <h2 class="login-headings">Register</h2>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <div class="form-label">
+                        {{ form.username.label }}<br>
+                    </div>
+                    {{ form.username(size=32, class="form-control") }}<br>
+                    {% for error in form.username.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                    {% endfor %}
                 </div>
-                {{ form.username(size=32, class="form-control") }}<br>
-                {% for error in form.username.errors %}
-                <span class="error-message">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <div class="form-label">
-                    {{ form.email.label }}<br>
+                <div class="form-group">
+                    <div class="form-label">
+                        {{ form.email.label }}<br>
+                    </div>
+                    {{ form.email(size=32, class="form-control") }}<br>
+                    {% for error in form.email.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                    {% endfor %}
                 </div>
-                {{ form.email(size=32, class="form-control") }}<br>
-                {% for error in form.email.errors %}
-                <span class="error-message">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <div class="form-label">
-                    {{ form.password.label }}<br>
-                </div>
-                {{ form.password(size=32, class="form-control") }}<br>
+                <div class="form-group">
+                    <div class="form-label">
+                        {{ form.password.label }}<br>
+                    </div>
+                    {{ form.password(size=32, class="form-control") }}<br>
 
-                {% for error in form.password.errors %}
-                <span class="error-message">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <div class="form-label">
-                    {{ form.password2.label }}<br>
+                    {% for error in form.password.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                    {% endfor %}
                 </div>
-                {{ form.password2(size=32, class="form-control") }}<br>
-                {% for error in form.password2.errors %}
-                <span class="error-message">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div>
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
-        <p>Already a registered user? <a href="{{ url_for('login') }}" class="reg-link-login">Login</a></p>
-    </div>
-</div>
+                <div class="form-group">
+                    <div class="form-label">
+                        {{ form.password2.label }}<br>
+                    </div>
+                    {{ form.password2(size=32, class="form-control") }}<br>
+                    {% for error in form.password2.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            <p>Already a registered user? <a href="{{ url_for('login') }}" class="reg-link-login">Login</a></p>
+        </div>
+    </section>
+</main>
 {% endblock %}
