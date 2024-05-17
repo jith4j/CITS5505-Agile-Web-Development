@@ -7,7 +7,7 @@
             <div class="content-wrap">
                 <h2 class="text-center">Welcome, {{ username }}!</h2>
                 <div class="contents-sec">
-                    <h3>Ask a Question</h3>
+                    <h3 class="question-label">Ask a Question</h3>
                     <form action="{{ url_for('forum', username=username) }}" method="post">
                         <div class="form-group">
                             <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
