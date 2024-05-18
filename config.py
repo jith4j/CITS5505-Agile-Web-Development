@@ -7,7 +7,8 @@ class Config:
 
 # Config for deployment db
 class DeploymentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    'sqlite:///' + os.path.join(basedir, 'app.db')
 
 # Non-persistent db for automated testing
 class TestConfig(Config):

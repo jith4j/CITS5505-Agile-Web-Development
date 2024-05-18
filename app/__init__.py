@@ -11,11 +11,11 @@ login.login_view = 'login'
 
 def create_app(config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config)
 
     db.init_app(app)
     migrate.init_app(app, db)
-    login.init(app)
+    login.init_app(app)
 
     from app.blueprints import main
     app.register_blueprint(main)
