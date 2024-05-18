@@ -234,3 +234,37 @@ def toggle_like(aid):
 
     likes_count = db.session.scalar(sa.select(sa.func.count(Like.id)).where(Like.answer_id == aid))
     return jsonify({'liked': liked, 'likes': likes_count})
+
+
+@app.route('/search')
+@login_required
+def search():
+    query = request.args.get('query')
+    if not query:
+        flash('Please enter a search term.', 'warning')
+        return redirect(url_for('forum', username=current_user.username))
+
+    questions = db.session.scalars(sa.select(Question).where(Question.question.ilike(f'%{query}%'))).all()
+    answers = db.session.scalars(sa.select(Answer).where(Answer.answer.ilike(f'%{query}%'))).all()
+    replies = db.session.scalars(sa.select(Reply).where(Reply.reply.ilike(f'%{query}%'))).all()
+
+    question_ids = {q.id for q in questions}
+    answer_question_ids = {a.question_id for a in answers}
+    reply_question_ids = {r.question_id for r in replies}
+
+    all_question_ids = question_ids.union(answer_question_ids).union(reply_question_ids)
+
+    ques_list = []
+    if all_question_ids:
+        ques = db.session.scalars(sa.select(Question).where(Question.id.in_(all_question_ids)).order_by(Question.timestamp.desc())).all()
+        for q in ques:
+            ques_list.append({
+                'author': q.author.username,
+                'author_avatar': q.author,
+                'body': q.question,
+                'timestamp': q.timestamp,
+                'id': q.id
+            })
+
+    return render_template('forum.html', username=current_user.username, ques=ques_list, sort='desc', query=query, humanize=humanize)
+
