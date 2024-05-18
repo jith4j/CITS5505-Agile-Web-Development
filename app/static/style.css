@@ -383,3 +383,42 @@ hr {
   padding-right: 40px;
   align-items: center;
 }
+
+
+/* Styling for reply functionality */
+.btn-reply {
+  padding: 2px 5px;
+  font-size: 12px;
+  background-color: rgba(128, 128, 128, 0.7);  /* Grey color with slight transparency */
+  border: none;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-reply:hover {
+  background-color: rgba(128, 128, 128, 1);  /* Darker grey on hover */
+}
+
+.reply-form {
+  display: none;
+  margin-top: 10px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.reply-form button {
+  padding: 5px 10px;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
