@@ -235,19 +235,34 @@ hr {
   gap: 10px;
 }
 
+.sorting-options-answers {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .btn-sort {
-  padding: 5px 10px;
+  padding: 8px 16px;
   font-size: 14px;
-  background-color: #f0f0f0;
-  border: none;
+  font-weight: bold;
+  text-decoration: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .btn-sort.active {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-sort:not(.active) {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-sort:not(.active):hover {
+  background-color: #e0e0e0;
 }
 
 .question-cards {
@@ -492,6 +507,66 @@ hr {
   align-items: center;
   gap: 5px;
   margin-bottom: 10px;
+}
+
+/* inside answer sorting */
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sorting-options {
+  position: relative;
+}
+
+.btn-sort {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-sort:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 0;
+  z-index: 1;
+  font-size: 12px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-item.active {
+  background-color: #4caf50;
+  color: white;
 }
 
 /* Styling for reply cards */
