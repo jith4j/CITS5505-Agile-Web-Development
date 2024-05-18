@@ -9,7 +9,7 @@
         <ul class="list-group">
             {% for a in ans %}
             <li class="list-group-item">
-                {{ a.answer }} - <small>by {{ a.author }} at {{ a.timestamp }}</small>
+                {{ a.answer }} - by {{ a.author }} at {{ a.timestamp }} - <span id="likes-count-{{ a.id }}">{{ a.likes }}</span> <span id="like-icon-{{ a.id }}" class="like-icon" onclick="toggleLike({{ a.id }})">{{ '♥' if a.user_liked else '♡' }}</span>
                 <!-- Display existing replies for each answer -->
                 {% if a.all_replies %}
                     <ul>
@@ -56,6 +56,27 @@ function toggleReplyForm(answerId) {
     } else {
         form.style.display = 'none';
     }
+}
+
+function toggleLike(answerId) {
+    var likeIcon = document.getElementById('like-icon-' + answerId);
+    var likesCount = document.getElementById('likes-count-' + answerId);
+
+    fetch(`/toggle_like/${answerId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => response.json()).then(data => {
+        if (data.liked) {
+            likeIcon.textContent = '♥';
+        } else {
+            likeIcon.textContent = '♡';
+        }
+        likesCount.textContent = data.likes;
+    }).catch(error => {
+        console.error('Error:', error);
+    });
 }
 </script>
 
