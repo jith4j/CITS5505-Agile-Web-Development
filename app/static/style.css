@@ -48,7 +48,7 @@ a {
   padding: 15px 40px;
 }
 
-/* Styling for landing page */
+/*landing page */
 
 .welcome {
   margin: 0;
@@ -104,7 +104,7 @@ a {
   text-align: center;
 }
 
-.text-center {
+.text-heading {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
@@ -305,7 +305,7 @@ hr {
   font-size: 14px;
 }
 
-/* Styling for Profile Page */
+/*Profile Page */
 .profile-container {
   display: flex;
   flex-direction: column;
@@ -395,12 +395,82 @@ hr {
   align-items: center;
 }
 
+/* Styling for answer cards */
+.answer-heading {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
+}
 
-/* Styling for reply functionality */
+.answer-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.answer-card {
+  background-color: #d2e7ff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.answer-card:hover {
+  transform: translateY(-3px);
+}
+
+.answer-body {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.answer-like-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.likes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+/* Styling for reply cards */
+.reply-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.reply-card {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.reply-card:hover {
+  transform: translateY(-1px);
+}
+
+.reply-body {
+  color: #666;
+  line-height: 1.4;
+}
+
+.like-icon {
+  cursor: pointer;
+}
+
 .btn-reply {
   padding: 2px 5px;
   font-size: 12px;
-  background-color: rgba(128, 128, 128, 0.7);  /* Grey color with slight transparency */
   border: none;
   border-radius: 3px;
   color: white;
@@ -408,10 +478,6 @@ hr {
   margin-top: 10px;
   margin-bottom: 10px;
   transition: background-color 0.3s ease;
-}
-
-.btn-reply:hover {
-  background-color: rgba(128, 128, 128, 1);  /* Darker grey on hover */
 }
 
 .reply-form {
@@ -432,9 +498,4 @@ hr {
   font-size: 12px;
   margin-top: 5px;
   margin-right: 5px;
-}
-
-/* Like icon styles */
-.like-icon {
-  cursor: pointer;
 }

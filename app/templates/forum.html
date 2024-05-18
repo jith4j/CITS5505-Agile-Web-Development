@@ -5,7 +5,7 @@
     <div class="forum-wrapper">
         <div class="container">
             <div class="content-wrap">
-                <h2 class="text-center">Welcome, {{ username }}!</h2>
+                <h2 class="text-center text-heading">Welcome, {{ username }}!</h2>
                 <div class="contents-sec">
                     <h3 class="question-label">Ask a Question</h3>
                     <form action="{{ url_for('forum', username=username) }}" method="post">
@@ -19,7 +19,7 @@
                 </div>
                 <hr>
                 <div class="forum-header">
-                    <h3 class="text-center">Forum</h3>
+                    <h3 class="text-center text-heading">Forum</h3>
                     <div class="sorting-options">
                         <a href="{{ url_for('forum', username=username, sort='asc') }}"
                             class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
@@ -48,7 +48,7 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-center">No questions found.</p>
+                <p class="text-center text-heading">No questions found.</p>
                 {% endif %}
             </div>
         </div>
