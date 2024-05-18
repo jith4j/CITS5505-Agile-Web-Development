@@ -120,6 +120,7 @@ def forum(username):
     for q in ques:
         ques_list.append({
             'author': q.author.username,
+            'author_avatar': q.author,
             'body': q.question,
             'timestamp': q.timestamp,
             'id': q.id
