@@ -135,7 +135,13 @@ def answer(qid):
     ques = db.session.get(Question, qid)
     for a in ans:
         replies = db.session.scalars(sa.select(Reply).where(Reply.answer_id == a.id)).all()
-        ans_list.append({'answer': a.answer, 'id': a.id, 'all_replies': replies})
+        ans_list.append({
+            'answer': a.answer, 
+            'id': a.id, 
+            'author': a.author.username, 
+            'timestamp': a.timestamp,
+            'all_replies': replies
+        })
     return render_template('answer.html', ans=ans_list, question=ques)
 
 @app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])

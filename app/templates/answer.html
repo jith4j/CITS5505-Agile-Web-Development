@@ -9,7 +9,7 @@
         <ul class="list-group">
             {% for a in ans %}
             <li class="list-group-item">
-                {{ a.answer }}
+                {{ a.answer }} - <small>by {{ a.author }} at {{ a.timestamp }}</small>
                 <!-- Display existing replies for each answer -->
                 {% if a.all_replies %}
                     <ul>
@@ -60,4 +60,3 @@ function toggleReplyForm(answerId) {
 </script>
 
 {% endblock %}
-
