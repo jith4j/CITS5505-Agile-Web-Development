@@ -134,6 +134,8 @@ def answer(qid):
     ans_list = []
     ans = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
     ques = db.session.get(Question, qid)
+    sort_order = request.args.get('sort', 'most_liked')
+
     for a in ans:
         replies = db.session.scalars(sa.select(Reply).where(Reply.answer_id == a.id)).all()
         likes = db.session.scalars(sa.select(Like).where(Like.answer_id == a.id)).all()
@@ -148,7 +150,17 @@ def answer(qid):
             'likes': len(likes),
             'user_liked': user_liked
         })
-    return render_template('answer.html', ans=ans_list, question=ques)
+
+    if sort_order == 'most_liked':
+        ans_list.sort(key=lambda a: a['likes'], reverse=True)
+    elif sort_order == 'least_liked':
+        ans_list.sort(key=lambda a: a['likes'])
+    elif sort_order == 'newest':
+        ans_list.sort(key=lambda a: a['timestamp'], reverse=True)
+    else:
+        ans_list.sort(key=lambda a: a['timestamp'])
+
+    return render_template('answer.html', ans=ans_list, question=ques, sort=sort_order, humanize=humanize)
 
 @app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
 @login_required

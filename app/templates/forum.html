@@ -76,25 +76,5 @@
         });
     });
 
-    function get_answers(qid, container) {
-        $.ajax({
-            url: '/latestAnswer/' + qid,
-            type: 'GET',
-            success: function (data) {
-                console.log("Data received for:", qid, data);
-                if (data.length > 0) {
-                    var allAnswers = data.map(a => `<p>Answer: ${a.answer}</p>`).join('');
-                    container.html(allAnswers);
-                } else {
-                    container.html('<p>No answers found.</p>');
-                }
-            },
-            error: function () {
-                console.log("Error fetching data for:", qid);
-                container.html('<p>Error retrieving answers. Please try again.</p>');
-            }
-        });
-    }
-
 </script>
 {% endblock %}
