@@ -30,8 +30,13 @@
                     <p class="answer-body">{{ a.answer }}</p>
                     <div class="likes">
                         <span id="likes-count-{{ a.id }}">{{ a.likes }}</span>
-                        <span id="like-icon-{{ a.id }}" class="like-icon" onclick="toggleLike({{ a.id }})">{{ '♥' if
-                            a.user_liked else '♡' }}</span>
+                        <span id="like-icon-{{ a.id }}" class="like-icon" onclick="toggleLike({{ a.id }})">
+                            {% if a.user_liked %}
+                            <i class="fas fa-heart" style="color: red;"></i>
+                            {% else %}
+                            <i class="far fa-heart" style="color: gray;"></i>
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
 
@@ -102,9 +107,9 @@
             }
         }).then(response => response.json()).then(data => {
             if (data.liked) {
-                likeIcon.textContent = '♥';
+                likeIcon.innerHTML = '<i class="fas fa-heart" style="color: red;"></i>';
             } else {
-                likeIcon.textContent = '♡';
+                likeIcon.innerHTML = '<i class="far fa-heart" style="color: gray;"></i>';
             }
             likesCount.textContent = data.likes;
         }).catch(error => {
