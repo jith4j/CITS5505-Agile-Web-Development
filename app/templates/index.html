@@ -3,7 +3,7 @@
 <main>
     <section class="welcome">
         <div class="welcome-container">
-            <h1>Welcome to Our Forum !</h1>
+            <h1>Welcome to Our Forum!</h1>
             <p>We're glad you're here. Click the button below to get started.</p>
             {% if current_user.is_authenticated %}
             <a href="{{ url_for('forum', username=current_user.username) }}" class="btn">Forum Page</a>
@@ -12,5 +12,24 @@
             {% endif %}
         </div>
     </section>
+    <div class="info-icon">
+        <i class="fas fa-info-circle"></i>
+        <div class="info-box">
+            <h3>Application Overview</h3>
+            <p>This application is a platform for users to request and share the best prompts for large language models
+                (LLMs)
+                to achieve specific tasks or goals.</p>
+            <p>Key features:</p>
+            <ul>
+                <li>Users can create an account and log in to access the forum.</li>
+                <li>Logged-in users can submit requests for prompts to accomplish certain tasks using LLMs.</li>
+                <li>Other users can provide answers by suggesting the best prompts for LLMs to achieve the requested
+                    goals.</li>
+                <li>Users can like answers that they find helpful and reply to them to provide additional insights or
+                    feedback.
+                </li>
+            </ul>
+        </div>
+    </div>
 </main>
 {% endblock %}
