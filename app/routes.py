@@ -142,6 +142,7 @@ def answer(qid):
             'answer': a.answer,
             'id': a.id,
             'author': a.author.username,
+            'author_avatar': a.author,
             'timestamp': a.timestamp,
             'all_replies': replies,
             'likes': len(likes),
