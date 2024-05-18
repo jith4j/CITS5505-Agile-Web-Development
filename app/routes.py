@@ -4,7 +4,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User, Question, Answer
+from app.models import User, Question, Answer, Reply
 import os
 import random
 import string
@@ -130,11 +130,18 @@ def forum(username):
 @app.route('/answer/<qid>', methods=['GET', 'POST'])
 @login_required
 def answer(qid):
-    ans_list=[]
-    ans=db.session.scalars(sa.select(Answer).where(Answer.question_id==qid)).all()
+    ans_list = []
+    ans = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
     ques = db.session.get(Question, qid)
     for a in ans:
-        ans_list.append({'answer':a.answer})
+        replies = db.session.scalars(sa.select(Reply).where(Reply.answer_id == a.id)).all()
+        ans_list.append({
+            'answer': a.answer, 
+            'id': a.id, 
+            'author': a.author.username, 
+            'timestamp': a.timestamp,
+            'all_replies': replies
+        })
     return render_template('answer.html', ans=ans_list, question=ques)
 
 @app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
@@ -174,3 +181,16 @@ def profile():
     ques_list = db.session.scalars(curruser.question_posts.select()).all()
     ans_list = db.session.scalars(curruser.answer_posts.select()).all()
     return render_template('profile.html', user=curruser, ques=ques_list, ans= ans_list)
+
+@app.route('/addReply/<int:aid>', methods=['POST'])
+@login_required
+def add_reply(aid):
+    reply_text = request.form.get('reply')
+    if reply_text:
+        answer = db.session.get(Answer, aid)
+        if answer is not None:
+            reply = Reply(reply=reply_text, author=current_user, answer_id=aid, question_id=answer.question_id)
+            db.session.add(reply)
+            db.session.commit()
+            flash('Reply added!')
+    return redirect(url_for('answer', qid=answer.question_id))
