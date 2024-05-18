@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     question_posts: so.WriteOnlyMapped['Question'] = so.relationship(back_populates='author')
     answer_posts: so.WriteOnlyMapped['Answer'] = so.relationship(back_populates='author')
+    all_replies: so.WriteOnlyMapped['Reply'] = so.relationship(back_populates='author')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -32,6 +33,7 @@ class Question(db.Model):
                                                index=True)
     author: so.Mapped[User] = so.relationship(back_populates='question_posts')
     answers: so.WriteOnlyMapped['Answer'] = so.relationship(back_populates='question')
+    all_replies: so.WriteOnlyMapped['Reply'] = so.relationship(back_populates='question')
 
     def __repr__(self):
         return '<Question{}>'.format(self.question)
@@ -47,9 +49,28 @@ class Answer(db.Model):
                                                index=True)
     author: so.Mapped[User] = so.relationship(back_populates='answer_posts')
     question: so.Mapped[Question] = so.relationship(back_populates='answers')
+    all_replies: so.WriteOnlyMapped['Reply'] = so.relationship(back_populates='answer')
 
     def __repr__(self):
         return '<Answer{}>'.format(self.answer)
+    
+class Reply(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    reply: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
+                                               index=True)
+    question_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Question.id),
+                                               index=True)
+    answer_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Answer.id),
+                                            index=True)
+    author: so.Mapped[User] = so.relationship(back_populates='all_replies')
+    question: so.Mapped[Question] = so.relationship(back_populates='all_replies')
+    answer: so.Mapped[Answer] = so.relationship(back_populates='all_replies')
+
+    def __repr__(self):
+        return '<Reply{}>'.format(self.reply)
     
 @login.user_loader
 def load_user(id):
