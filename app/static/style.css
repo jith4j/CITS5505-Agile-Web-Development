@@ -86,7 +86,7 @@ a {
   color: white;
 }
 
-/* forum.html styles */
+/* forum.html */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -223,6 +223,17 @@ hr {
 .author {
   font-weight: bold;
   color: #333;
+}
+
+.author-avatar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 1px solid #ccc;
 }
 
 .timestamp {
