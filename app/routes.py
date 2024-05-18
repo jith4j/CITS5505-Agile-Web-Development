@@ -4,7 +4,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User, Question, Answer, Reply
+from app.models import User, Question, Answer, Reply, Like
 import os
 import random
 import string
@@ -135,12 +135,16 @@ def answer(qid):
     ques = db.session.get(Question, qid)
     for a in ans:
         replies = db.session.scalars(sa.select(Reply).where(Reply.answer_id == a.id)).all()
+        likes = db.session.scalars(sa.select(Like).where(Like.answer_id == a.id)).all()
+        user_liked = any(like.user_id == current_user.id for like in likes)
         ans_list.append({
-            'answer': a.answer, 
-            'id': a.id, 
-            'author': a.author.username, 
+            'answer': a.answer,
+            'id': a.id,
+            'author': a.author.username,
             'timestamp': a.timestamp,
-            'all_replies': replies
+            'all_replies': replies,
+            'likes': len(likes),
+            'user_liked': user_liked
         })
     return render_template('answer.html', ans=ans_list, question=ques)
 
@@ -194,3 +198,25 @@ def add_reply(aid):
             db.session.commit()
             flash('Reply added!')
     return redirect(url_for('answer', qid=answer.question_id))
+
+
+@app.route('/toggle_like/<int:aid>', methods=['POST'])
+@login_required
+def toggle_like(aid):
+    answer = db.session.get(Answer, aid)
+    if answer is None:
+        flash('Answer not found.', 'danger')
+        return jsonify({'error': 'Answer not found'}), 404
+
+    like = db.session.scalar(sa.select(Like).where(Like.user_id == current_user.id, Like.answer_id == aid))
+    if like is None:
+        new_like = Like(user_id=current_user.id, answer_id=aid)
+        db.session.add(new_like)
+        liked = True
+    else:
+        db.session.delete(like)
+        liked = False
+    db.session.commit()
+
+    likes_count = db.session.scalar(sa.select(sa.func.count(Like.id)).where(Like.answer_id == aid))
+    return jsonify({'liked': liked, 'likes': likes_count})

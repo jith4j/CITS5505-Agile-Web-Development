@@ -422,3 +422,8 @@ hr {
   margin-top: 5px;
   margin-right: 5px;
 }
+
+/* Like icon styles */
+.like-icon {
+  cursor: pointer;
+}
