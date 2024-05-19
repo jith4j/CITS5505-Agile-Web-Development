@@ -2,15 +2,18 @@ from app import create_app, db
 from config import TestConfig
 import multiprocessing
 from selenium import webdriver
+import time
 from app.models import User, Question, Answer, Reply
 from unittest import TestCase
 import unittest
 
 localHost = "http://localhost:5000/"
+from selenium.webdriver.edge.service import Service
 
 def add_test_data_to_db():
     user = User(username='uno', email='uno@example.com')
     db.session.add(user)
+    user.set_password('one')
     db.session.commit()
 
 class SeleniumTests(TestCase):
@@ -24,7 +27,9 @@ class SeleniumTests(TestCase):
         self.server_thread = multiprocessing.Process(target=self.testapp.run)
         self.server_thread.start()
 
-        self.driver = webdriver.Chrome()
+        edgedriver_path = './app/static/drivers/msedgedriver.exe'
+        service = Service(executable_path=edgedriver_path)
+        self.driver = webdriver.Edge(service=service)
         self.driver.get(localHost)
 
     def tearDown(self):
@@ -35,19 +40,9 @@ class SeleniumTests(TestCase):
         self.app_context.pop()
 
     def test_example(self):
-        # Add your test case here
+        # creating an empty browser
+        # with logged in user added
         pass
 
 if __name__ == '__main__':
     unittest.main()
-
-# def test_groups_page(self):
-    #     self.driver.get(localHost + "login")
-        # for group in Group.query.all():
-        # for student in group.students:
-        # elems = self.driver.find_elements(By.ID, student.uwa_id)
-        # self.assertEquals(
-        # len(elems),
-        # 1,
-        # f"Could not find student {student.uwa_id} on Groups page"
-        # )
