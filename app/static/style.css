@@ -22,6 +22,31 @@ a {
   z-index: 100;
 }
 
+.nav-options a {
+  position: relative;
+}
+
+.nav-options a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  background-color: #ef6566;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-options a:hover::after,
+.nav-options a.active::after {
+  transform: scaleX(1);
+}
+
+.nav-options a.active::after {
+  background-color: #ef6566;
+}
+
 .heading {
   width: 10%;
   display: flex;
@@ -48,7 +73,7 @@ a {
   padding: 15px 40px;
 }
 
-/* Styling for landing page */
+/*landing page */
 
 .welcome {
   margin: 0;
@@ -86,7 +111,37 @@ a {
   color: white;
 }
 
-/* forum.html styles */
+.info-icon {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+.info-box {
+  display: none;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 500px;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-icon:hover .info-box {
+  display: block;
+}
+
+/* forum.html */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -104,7 +159,7 @@ a {
   text-align: center;
 }
 
-.text-center {
+.text-heading {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
@@ -125,7 +180,7 @@ a {
 }
 
 textarea.form-control {
-  width: 100%;
+  width: 98%;
   height: 120px;
   padding: 10px;
   font-size: 16px;
@@ -180,19 +235,34 @@ hr {
   gap: 10px;
 }
 
+.sorting-options-answers {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .btn-sort {
-  padding: 5px 10px;
+  padding: 8px 16px;
   font-size: 14px;
-  background-color: #f0f0f0;
-  border: none;
+  font-weight: bold;
+  text-decoration: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .btn-sort.active {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-sort:not(.active) {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-sort:not(.active):hover {
+  background-color: #e0e0e0;
 }
 
 .question-cards {
@@ -223,6 +293,17 @@ hr {
 .author {
   font-weight: bold;
   color: #333;
+}
+
+.author-avatar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 1px solid #ccc;
 }
 
 .timestamp {
@@ -294,7 +375,7 @@ hr {
   font-size: 14px;
 }
 
-/* Styling for Profile Page */
+/*Profile Page */
 .profile-container {
   display: flex;
   flex-direction: column;
@@ -384,12 +465,142 @@ hr {
   align-items: center;
 }
 
+/* Styling for answer cards */
+.answer-heading {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
+}
 
-/* Styling for reply functionality */
+.answer-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.answer-card {
+  background-color: #d2e7ff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.answer-card:hover {
+  transform: translateY(-3px);
+}
+
+.answer-body {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.answer-like-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.likes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+/* inside answer sorting */
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sorting-options {
+  position: relative;
+}
+
+.btn-sort {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-sort:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 0;
+  z-index: 1;
+  font-size: 12px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-item.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Styling for reply cards */
+.reply-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.reply-card {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.reply-card:hover {
+  transform: translateY(-1px);
+}
+
+.reply-body {
+  color: #666;
+  line-height: 1.4;
+}
+
+.like-icon {
+  cursor: pointer;
+}
+
 .btn-reply {
   padding: 2px 5px;
   font-size: 12px;
-  background-color: rgba(128, 128, 128, 0.7);  /* Grey color with slight transparency */
   border: none;
   border-radius: 3px;
   color: white;
@@ -397,10 +608,6 @@ hr {
   margin-top: 10px;
   margin-bottom: 10px;
   transition: background-color 0.3s ease;
-}
-
-.btn-reply:hover {
-  background-color: rgba(128, 128, 128, 1);  /* Darker grey on hover */
 }
 
 .reply-form {
@@ -421,4 +628,70 @@ hr {
   font-size: 12px;
   margin-top: 5px;
   margin-right: 5px;
+}
+
+@media (max-width: 980px) {
+  .nav-bar {
+    height: 8rem;
+    font-size: 28px;
+  }
+
+  .welcome-container {
+    width: 60%;
+    font-size: 28px;
+  }
+
+  .fa,
+  .fas,
+  .fab,
+  .far {
+    font-size: 3rem;
+  }
+
+  .info-box {
+    width: 800px;
+    font-size: 24px;
+  }
+
+  .container {
+    max-width: none;
+  }
+
+  .reply-body {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .author {
+    font-size: 20px;
+  }
+
+  .answer-body {
+    font-size: 24px;
+  }
+
+  .timestamp {
+    font-size: 20px;
+  }
+
+  .btn-reply {
+    width: 5rem;
+    padding: 10px 0;
+    font-size: 20px;
+  }
+
+  .likes span {
+    font-size: 30px;
+    margin-right: 4px;
+  }
+
+  .mt-4 h4,
+  .form-group label {
+    font-size: 24px;
+  }
+
+  .login-container {
+    max-width: none;
+    width: 500px;
+  }
 }

@@ -3,60 +3,112 @@
 {% block content %}
 
 <div class="container">
-    <h3>Answers for: {{ question.question }}</h3>
-    
-    {% if ans %}
-        <ul class="list-group">
+    <div class="content-wrap">
+        <div class="question-info">
+            <div class="wrap">
+                <div class="author-avatar">
+                    <img class="avatar" src="{{ question.author.avatar(36) }}">
+                    <p class="author"><strong>{{ question.author.username }}</strong></p>
+                </div>
+                <p class="timestamp">{{ humanize.naturaltime(question.timestamp) }}</p>
+            </div>
+            <h1 class="text-center answer-heading">{{ question.question }}</h1>
+        </div>
+
+        {% if ans %}
+        <div class="answer-header">
+            <h3 class="text-center">Answers</h3>
+            <div class="sorting-options">
+                <div class="dropdown">
+                    <button class="btn btn-sort dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Sort{% if sort == 'most_liked' %}: Most Liked
+                        {% elif sort == 'least_liked' %}: Least Liked
+                        {% elif sort == 'newest' %}: Newest
+                        {% elif sort == 'oldest' %}: Oldest
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <a class="dropdown-item{% if sort == 'most_liked' %} active{% endif %}"
+                            href="{{ url_for('answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
+                        <a class="dropdown-item{% if sort == 'least_liked' %} active{% endif %}"
+                            href="{{ url_for('answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
+                        <a class="dropdown-item{% if sort == 'newest' %} active{% endif %}"
+                            href="{{ url_for('answer', qid=question.id, sort='newest') }}">Newest</a>
+                        <a class="dropdown-item{% if sort == 'oldest' %} active{% endif %}"
+                            href="{{ url_for('answer', qid=question.id, sort='oldest') }}">Oldest</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="answer-cards">
             {% for a in ans %}
-            <li class="list-group-item">
-                {{ a.answer }} - <small>by {{ a.author }} at {{ a.timestamp }}</small>
-                <!-- Display existing replies for each answer -->
+            <div class="answer-card">
+                <div class="wrap">
+                    <div class="author-avatar">
+                        <img class="avatar" src="{{ a.author_avatar.avatar(36) }}">
+                        <p class="author"><strong>{{ a.author }}</strong></p>
+                    </div>
+                    <p class="timestamp">{{ humanize.naturaltime(a.timestamp) }}</p>
+                </div>
+                <div class="answer-like-wrap">
+                    <p class="answer-body">{{ a.answer }}</p>
+                    <div class="likes">
+                        <span id="likes-count-{{ a.id }}">{{ a.likes }}</span>
+                        <span id="like-icon-{{ a.id }}" class="like-icon" onclick="toggleLike({{ a.id }})">
+                            {% if a.user_liked %}
+                            <i class="fas fa-heart" style="color: red;"></i>
+                            {% else %}
+                            <i class="far fa-heart" style="color: gray;"></i>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Existing replies -->
                 {% if a.all_replies %}
-                    <ul>
-                        {% for reply in a.all_replies %}
-                            <li>{{ reply.reply }} - <small>by {{ reply.author.username }} at {{ reply.timestamp }}</small></li>
-                        {% endfor %}
-                    </ul>
+                <div class="reply-cards">
+                    {% for reply in a.all_replies %}
+                    <div class="reply-card">
+                        <div class="wrap">
+                            <div class="author-avatar">
+                                <img class="avatar" src="{{ reply.author.avatar(36) }}">
+                                <p class="author"><strong>{{ reply.author.username }}</strong></p>
+                            </div>
+                            <p class="timestamp">{{ humanize.naturaltime(reply.timestamp) }}</p>
+                        </div>
+                        <p class="reply-body">{{ reply.reply }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
                 {% endif %}
-                <!-- Reply button -->
-                <button class="btn-reply" onclick="toggleReplyForm({{ a.id }})">Reply</button>
-                <!-- Form to submit a new reply -->
+                <button class="btn-reply btn" onclick="toggleReplyForm({{ a.id }})">Reply</button>
                 <div id="reply-form-{{ a.id }}" class="reply-form">
                     <form action="{{ url_for('main.add_reply', aid=a.id) }}" method="POST">
                         <textarea name="reply" placeholder="Reply to this answer..." required></textarea>
                         <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="toggleReplyForm({{ a.id }})">Cancel</button>
+                        <button type="button" class="btn btn-danger btn-sm"
+                            onclick="toggleReplyForm({{ a.id }})">Cancel</button>
                     </form>
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-    <p>No answers found.</p>
-    {% endif %}
-
-    <!-- Form to add a new answer -->
-    <div class="mt-4">
-        <h4>Add Your Answer</h4>
-        <form action="{{ url_for('main.add_answer', qid=question.id) }}" method="POST">
-            <div class="form-group">
-                <label for="answer">Your Answer</label>
-                <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-        </form>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-heading">No answers found.</p>
+        {% endif %}
+
+        <div class="mt-4">
+            <h4>Add Your Answer</h4>
+            <form action="{{ url_for('main.add_answer', qid=question.id) }}" method="POST">
+                <div class="form-group">
+                    <label for="answer">Your Answer</label>
+                    <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </form>
+        </div>
     </div>
 </div>
-
-<script>
-function toggleReplyForm(answerId) {
-    var form = document.getElementById('reply-form-' + answerId);
-    if (form.style.display === 'none' || form.style.display === '') {
-        form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
-    }
-}
-</script>
 
 {% endblock %}

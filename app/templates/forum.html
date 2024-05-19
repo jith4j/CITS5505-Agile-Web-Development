@@ -5,7 +5,11 @@
     <div class="forum-wrapper">
         <div class="container">
             <div class="content-wrap">
-                <h2 class="text-center">Welcome, {{ username }}!</h2>
+                <form action="{{ url_for('search') }}" method="get" style="float: right; margin-top: -50px;">
+                    <input type="text" name="query" placeholder="Search..." value="{{ query }}">
+                    <button type="submit" class="btn btn-sort" style="padding: 5px 10px;">Search</button>
+                </form>
+                <h2 class="text-center text-heading">Welcome, {{ username }}!</h2>
                 <div class="contents-sec">
                     <h3 class="question-label">Ask a Question</h3>
                     <form action="{{ url_for('main.forum', username=username) }}" method="post">
@@ -19,7 +23,7 @@
                 </div>
                 <hr>
                 <div class="forum-header">
-                    <h3 class="text-center">Forum</h3>
+                    <h3 class="text-center text-heading">Forum</h3>
                     <div class="sorting-options">
                         <a href="{{ url_for('main.forum', username=username, sort='asc') }}"
                             class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
@@ -30,20 +34,25 @@
                 {% if ques %}
                 <div class="question-cards" id="questionList">
                     {% for q in ques %}
-                    <div class="question-card" data-id="{{ q.id }}">
-                        <a href="{{ url_for('main.answer', qid=q.id) }}">
-                            <div class="wrap">
-                                <p class="author"><strong>{{ q.author }}</strong></p>
-                                <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
-                            </div>
-                            <p class="question-body">{{ q.body }}</p>
-                        </a>
-                        <div id="{{ q.id }}"></div>
+                    <div class="question-cards" id="questionList">
+                        <div class="question-card" data-id="{{ q.id }}">
+                            <a href="{{ url_for('main.answer', qid=q.id) }}">
+                                <div class="wrap">
+                                    <div class="author-avatar">
+                                        <img class="avatar" src="{{ q.author_avatar.avatar(36) }}">
+                                        <p class="author"><strong>{{ q.author }}</strong></p>
+                                    </div>
+                                    <p class="timestamp">{{ humanize.naturaltime(q.timestamp) }}</p>
+                                </div>
+                                <p class="question-body">{{ q.body }}</p>
+                            </a>
+                            <div id="{{ q.id }}"></div>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-center">No questions found.</p>
+                <p class="text-center text-heading">No questions found.</p>
                 {% endif %}
             </div>
         </div>
@@ -66,26 +75,6 @@
             console.log("Cleared answers on mouse leave...");
         });
     });
-
-    function get_answers(qid, container) {
-        $.ajax({
-            url: '/latestAnswer/' + qid,
-            type: 'GET',
-            success: function (data) {
-                console.log("Data received for:", qid, data);
-                if (data.length > 0) {
-                    var allAnswers = data.map(a => `<p>Answer: ${a.answer}</p>`).join('');
-                    container.html(allAnswers);
-                } else {
-                    container.html('<p>No answers found.</p>');
-                }
-            },
-            error: function () {
-                console.log("Error fetching data for:", qid);
-                container.html('<p>Error retrieving answers. Please try again.</p>');
-            }
-        });
-    }
 
 </script>
 {% endblock %}

@@ -5,6 +5,7 @@ from app import db, login
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
 
 class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -14,6 +15,8 @@ class User(UserMixin, db.Model):
     question_posts: so.WriteOnlyMapped['Question'] = so.relationship(back_populates='author')
     answer_posts: so.WriteOnlyMapped['Answer'] = so.relationship(back_populates='author')
     all_replies: so.WriteOnlyMapped['Reply'] = so.relationship(back_populates='author')
+    liked_answers: so.WriteOnlyMapped['Like'] = so.relationship('Like', back_populates='user')
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -23,6 +26,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
     
 class Question(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -50,6 +57,8 @@ class Answer(db.Model):
     author: so.Mapped[User] = so.relationship(back_populates='answer_posts')
     question: so.Mapped[Question] = so.relationship(back_populates='answers')
     all_replies: so.WriteOnlyMapped['Reply'] = so.relationship(back_populates='answer')
+    likes: so.WriteOnlyMapped['Like'] = so.relationship('Like', back_populates='answer')
+
 
     def __repr__(self):
         return '<Answer{}>'.format(self.answer)
@@ -71,6 +80,17 @@ class Reply(db.Model):
 
     def __repr__(self):
         return '<Reply{}>'.format(self.reply)
+    
+class Like(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'), nullable=False)
+    answer_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('answer.id'), nullable=False)
+    timestamp: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc), nullable=False)
+    user: so.Mapped[User] = so.relationship('User', back_populates='liked_answers')
+    answer: so.Mapped[Answer] = so.relationship('Answer', back_populates='likes')
+
+    def __repr__(self):
+        return f'<Like user_id={self.user_id} answer_id={self.answer_id}>'
     
 @login.user_loader
 def load_user(id):
