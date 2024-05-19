@@ -39,14 +39,14 @@
                 var container = $('#content'); 
                 container.empty();
                 if (type === 'questions') {
-                    get_questions(uid, container);
+                    get_u_questions(uid, container);
                 } else {
-                    get_answers(uid, container);
+                    get_u_answers(uid, container);
                 }
             });
         });
     
-        function get_questions(uid, container) {
+        function get_u_questions(uid, container) {
             $.ajax({
                 url: '/uQuestions/' + uid,
                 type: 'GET',
@@ -64,7 +64,7 @@
             });
         }
     
-        function get_answers(uid, container) {
+        function get_u_answers(uid, container) {
             $.ajax({
                 url: '/uAnswers/' + uid,
                 type: 'GET',
