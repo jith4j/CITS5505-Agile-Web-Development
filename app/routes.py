@@ -289,3 +289,28 @@ def uAnswers(uid):
                               'time': humanize.naturaltime(a.timestamp)
                               })
     return jsonify(ans_list)
+
+@main.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    if current_user.id != user_id:
+        flash('You are not authorized to delete this account.', 'danger')
+        return redirect(url_for('main.profile'))
+
+    user = db.session.get(User, user_id)
+    if not user:
+        flash('User not found.', 'danger')
+        return redirect(url_for('main.profile'))
+
+    # Generate a unique 6-digit number
+    unique_id = ''.join(random.choices(string.digits, k=6))
+    user.username = f'deleted_account_{unique_id}'
+    user.email = f'deletedaccount_{unique_id}@mail.com'
+    db.session.commit()
+
+    logout_user()
+
+    flash('Your account has been deleted.', 'success')
+    return redirect(url_for('main.login'))
+
+
