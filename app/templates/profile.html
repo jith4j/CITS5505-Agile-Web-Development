@@ -1,31 +1,34 @@
 {% extends "navbar.html" %}
 {% block content %}
-    <div class="profile-container">
-        <section class="profile-top-container">
-            <div class="profile">
-                <div class="profile-pic">
-                    <img src="../static/assets/img_avatar.png" alt="Avatar">
+<div class="container">
+    <div class="content-wrap">
+        <div class="profile-container">
+            <section class="profile-top-container">
+                <div class="profile">
+                    <div class="profile-pic">
+                        <img src="../static/assets/img_avatar.png" alt="Avatar">
+                    </div>
+                    <div class="profile-details">
+                        <div class="username">{{ user.username }}</div>
+                        <div class="email">{{ user.email }}</div>
+                        <!-- Placeholder for masked password -->
+                        <div class="password">***********</div> 
+                    </div>
                 </div>
-                <div class="profile-details">
-                    <div class="username">{{ user.username }}</div>
-                    <div class="email">{{ user.email }}</div>
-                    <!-- Placeholder for masked password -->
-                    <div class="password">***********</div> 
-                </div>
-            </div>
-        </section>
+            </section>
         <!-- https://codepen.io/Lewitje/pen/doJRBX/ -->
-        <div class="profile-body">
-            <ul class="profile-tabs" id="ques_ans_list">
-                <li data-tab="questions" class="tab" data-id="{{ user.id }}">My Questions</li>
-                <li data-tab="answers" class="tab" data-id="{{ user.id }}">My Answers</li>
-            </ul>
-            <div class="profile-tabs-content" id="content">
-                <p>Questions/Answers</p>
+            <div class="profile-body">
+                <ul class="profile-tabs" id="ques_ans_list">
+                    <li data-tab="questions" class="tab" data-id="{{ user.id }}">My Questions</li>
+                    <li data-tab="answers" class="tab" data-id="{{ user.id }}">My Answers</li>
+                </ul>
+                <div class="profile-tabs-content" id="content">
+                    <p>Questions/Answers</p>
+                </div>
             </div>
         </div>
     </div>
-
+</div>
     <script>
         $(document).ready(function() {
             $('#ques_ans_list').on('click', '.tab', function() {
