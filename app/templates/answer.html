@@ -16,6 +16,31 @@
         </div>
 
         {% if ans %}
+        <div class="answer-header">
+            <h3 class="text-center">Answers</h3>
+            <div class="sorting-options">
+                <div class="dropdown">
+                    <button class="btn btn-sort dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Sort{% if sort == 'most_liked' %}: Most Liked
+                        {% elif sort == 'least_liked' %}: Least Liked
+                        {% elif sort == 'newest' %}: Newest
+                        {% elif sort == 'oldest' %}: Oldest
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <a class="dropdown-item{% if sort == 'most_liked' %} active{% endif %}"
+                            href="{{ url_for('main.answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
+                        <a class="dropdown-item{% if sort == 'least_liked' %} active{% endif %}"
+                            href="{{ url_for('main.answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
+                        <a class="dropdown-item{% if sort == 'newest' %} active{% endif %}"
+                            href="{{ url_for('main.answer', qid=question.id, sort='newest') }}">Newest</a>
+                        <a class="dropdown-item{% if sort == 'oldest' %} active{% endif %}"
+                            href="{{ url_for('main.answer', qid=question.id, sort='oldest') }}">Oldest</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="answer-cards">
             {% for a in ans %}
             <div class="answer-card">
@@ -42,28 +67,25 @@
 
                 <!-- Existing replies -->
                 {% if a.all_replies %}
-                <div class="reply-cards">
-                    {% for reply in a.all_replies %}
-                    <div class="reply-card">
-                        <div class="wrap">
-                            <div class="author-avatar">
-                                <img class="avatar" src="{{ reply.author.avatar(36) }}">
-                                <p class="author"><strong>{{ reply.author.username }}</strong></p>
+                <div class="replies">
+                    <ul>
+                        {% for reply in a.all_replies %}
+                        <li>
+                            <div class="reply-info">
+                                <span>@{{ reply.author.username }}</span> <span class="timestamp">{{ humanize.naturaltime(reply.timestamp) }}</span>
                             </div>
-                            <p class="timestamp">{{ humanize.naturaltime(reply.timestamp) }}</p>
-                        </div>
-                        <p class="reply-body">{{ reply.reply }}</p>
-                    </div>
-                    {% endfor %}
+                            <div class="reply-body">{{ reply.reply }}</div>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
                 <button class="btn-reply btn" onclick="toggleReplyForm({{ a.id }})">Reply</button>
                 <div id="reply-form-{{ a.id }}" class="reply-form">
-                    <form action="{{ url_for('add_reply', aid=a.id) }}" method="POST">
+                    <form action="{{ url_for('main.add_reply', aid=a.id) }}" method="POST">
                         <textarea name="reply" placeholder="Reply to this answer..." required></textarea>
                         <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
-                        <button type="button" class="btn btn-danger btn-sm"
-                            onclick="toggleReplyForm({{ a.id }})">Cancel</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="toggleReplyForm({{ a.id }})">Cancel</button>
                     </form>
                 </div>
             </div>
@@ -75,7 +97,7 @@
 
         <div class="mt-4">
             <h4>Add Your Answer</h4>
-            <form action="{{ url_for('add_answer', qid=question.id) }}" method="POST">
+            <form action="{{ url_for('main.add_answer', qid=question.id) }}" method="POST">
                 <div class="form-group">
                     <label for="answer">Your Answer</label>
                     <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
@@ -85,37 +107,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function toggleReplyForm(answerId) {
-        var form = document.getElementById('reply-form-' + answerId);
-        if (form.style.display === 'none' || form.style.display === '') {
-            form.style.display = 'block';
-        } else {
-            form.style.display = 'none';
-        }
-    }
-
-    function toggleLike(answerId) {
-        var likeIcon = document.getElementById('like-icon-' + answerId);
-        var likesCount = document.getElementById('likes-count-' + answerId);
-
-        fetch(`/toggle_like/${answerId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
-            if (data.liked) {
-                likeIcon.innerHTML = '<i class="fas fa-heart" style="color: red;"></i>';
-            } else {
-                likeIcon.innerHTML = '<i class="far fa-heart" style="color: gray;"></i>';
-            }
-            likesCount.textContent = data.likes;
-        }).catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
 
 {% endblock %}
