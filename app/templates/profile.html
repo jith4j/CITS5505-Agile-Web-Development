@@ -6,7 +6,7 @@
             <section class="profile-top-container">
                 <div class="profile">
                     <div class="profile-pic">
-                        <img src="../static/assets/img_avatar.png" alt="Avatar">
+                        <img src="{{ user.avatar(36) }}" alt="Avatar" class="avatar">
                     </div>
                     <div class="profile-details">
                         <div class="username">{{ user.username }}</div>
@@ -52,7 +52,7 @@
                 type: 'GET',
                 success: function(data) {
                     if (data.length > 0) {
-                        var allQuestions = data.map(a => `<li><strong>${a.time}:</strong> ${a.question}</li>`).join('');
+                        var allQuestions = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.question}</li>`).join('');
                         container.html(allQuestions);
                     } else {
                         container.html('<p>No questions found.</p>');
@@ -70,7 +70,7 @@
                 type: 'GET',
                 success: function(data) {
                     if (data.length > 0) {
-                        var allAnswers = data.map(a => `<li><strong>${a.time}:</strong> ${a.answer}</li>`).join('');
+                        var allAnswers = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.answer}</li>`).join('');
                         container.html(allAnswers);
                     } else {
                         container.html('<p>No answers found.</p>');
