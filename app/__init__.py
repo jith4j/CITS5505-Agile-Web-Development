@@ -21,5 +21,3 @@ def create_app(config):
     app.register_blueprint(main)
 
     return app
-
-from app import routes,models
