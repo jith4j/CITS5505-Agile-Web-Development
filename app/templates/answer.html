@@ -30,13 +30,13 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="sortDropdown">
                         <a class="dropdown-item{% if sort == 'most_liked' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
                         <a class="dropdown-item{% if sort == 'least_liked' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
                         <a class="dropdown-item{% if sort == 'newest' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='newest') }}">Newest</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='newest') }}">Newest</a>
                         <a class="dropdown-item{% if sort == 'oldest' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='oldest') }}">Oldest</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='oldest') }}">Oldest</a>
                     </div>
                 </div>
             </div>

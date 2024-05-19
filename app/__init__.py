@@ -9,7 +9,6 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'login'
-app.jinja_env.globals['humanize'] = humanize
 
 def create_app(config):
     app = Flask(__name__)
@@ -18,6 +17,7 @@ def create_app(config):
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
+    app.jinja_env.globals['humanize'] = humanize
 
     from app.blueprints import main
     app.register_blueprint(main)

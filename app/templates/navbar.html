@@ -21,8 +21,8 @@
     <header>
         <nav class="nav-bar">
             <div class="heading">
-                <a href="{{ url_for('index') }}"><img src="../static/assets/logo.png" alt="" class="logo1"></a>
-                <a href="{{ url_for('index') }}"><img src="../static/assets/logo-word.png" alt="" class="logo2"></a>
+                <a href="{{ url_for('main.index') }}"><img src="../static/assets/logo.png" alt="" class="logo1"></a>
+                <a href="{{ url_for('main.index') }}"><img src="../static/assets/logo-word.png" alt="" class="logo2"></a>
             </div>
             <div class="nav-options">
                 <a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Home</a>

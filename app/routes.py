@@ -212,7 +212,7 @@ def add_reply(aid):
     return redirect(url_for('main.answer', qid=answer.question_id))
 
 
-@app.route('/toggle_like/<int:aid>', methods=['POST'])
+@main.route('/toggle_like/<int:aid>', methods=['POST'])
 @login_required
 def toggle_like(aid):
     answer = db.session.get(Answer, aid)
@@ -234,13 +234,13 @@ def toggle_like(aid):
     return jsonify({'liked': liked, 'likes': likes_count})
 
 
-@app.route('/search')
+@main.route('/search')
 @login_required
 def search():
     query = request.args.get('query')
     if not query:
         flash('Please enter a search term.', 'warning')
-        return redirect(url_for('forum', username=current_user.username))
+        return redirect(url_for('main.forum', username=current_user.username))
 
     questions = db.session.scalars(sa.select(Question).where(Question.question.ilike(f'%{query}%'))).all()
     answers = db.session.scalars(sa.select(Answer).where(Answer.answer.ilike(f'%{query}%'))).all()
