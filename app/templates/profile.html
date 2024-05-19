@@ -13,6 +13,9 @@
                         <div class="email">{{ user.email }}</div>
                         <!-- Placeholder for masked password -->
                         <div class="password">***********</div> 
+                        <form action="{{ url_for('main.delete_user', user_id=user.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                            <button type="submit" class="btn btn-danger">Delete Account</button>
+                        </form>
                     </div>
                 </div>
             </section>
@@ -29,58 +32,5 @@
         </div>
     </div>
 </div>
-    <script>
-        $(document).ready(function() {
-            $('#ques_ans_list').on('click', '.tab', function() {
-                var uid = $(this).data('id')
-                $('.tab').removeClass('active'); // Remove 'active' class from all tabs
-                $(this).addClass('active'); // Add 'active' class to clicked tab
-                var type = $(this).data('tab'); // Get data type (questions or answers)
-                var container = $('#content'); 
-                container.empty();
-                if (type === 'questions') {
-                    get_u_questions(uid, container);
-                } else {
-                    get_u_answers(uid, container);
-                }
-            });
-        });
-    
-        function get_u_questions(uid, container) {
-            $.ajax({
-                url: '/uQuestions/' + uid,
-                type: 'GET',
-                success: function(data) {
-                    if (data.length > 0) {
-                        var allQuestions = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.question}</li>`).join('');
-                        container.html(allQuestions);
-                    } else {
-                        container.html('<p>No questions found.</p>');
-                    }
-                },
-                error: function() {
-                    container.html('<p>Error retrieving questions. Please try again.</p>');
-                }
-            });
-        }
-    
-        function get_u_answers(uid, container) {
-            $.ajax({
-                url: '/uAnswers/' + uid,
-                type: 'GET',
-                success: function(data) {
-                    if (data.length > 0) {
-                        var allAnswers = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.answer}</li>`).join('');
-                        container.html(allAnswers);
-                    } else {
-                        container.html('<p>No answers found.</p>');
-                    }
-                },
-                error: function() {
-                    container.html('<p>Error retrieving answers. Please try again.</p>');
-                }
-            });
-        }
-    </script>
-    
-    {% endblock %}>
+
+{% endblock %}
