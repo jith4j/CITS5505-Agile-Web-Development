@@ -6,6 +6,9 @@ from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+import pytz
+
+PERTH_TZ = pytz.timezone('Australia/Perth')
 
 class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -35,7 +38,7 @@ class Question(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     question: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
     timestamp: so.Mapped[datetime] = so.mapped_column(
-        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
+        index=True, default=lambda: datetime.now(PERTH_TZ), nullable=False)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
     author: so.Mapped[User] = so.relationship(back_populates='question_posts')
@@ -49,7 +52,7 @@ class Answer(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     answer: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
     timestamp: so.Mapped[datetime] = so.mapped_column(
-        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
+        index=True, default=lambda: datetime.now(PERTH_TZ), nullable=False)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
     question_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Question.id),
@@ -67,7 +70,7 @@ class Reply(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     reply: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False)
     timestamp: so.Mapped[datetime] = so.mapped_column(
-        index=True, default=lambda: datetime.now(timezone.utc), nullable=False)
+        index=True, default=lambda: datetime.now(PERTH_TZ), nullable=False)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
     question_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Question.id),
@@ -85,7 +88,7 @@ class Like(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'), nullable=False)
     answer_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('answer.id'), nullable=False)
-    timestamp: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc), nullable=False)
+    timestamp: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(PERTH_TZ), nullable=False)
     user: so.Mapped[User] = so.relationship('User', back_populates='liked_answers')
     answer: so.Mapped[Answer] = so.relationship('Answer', back_populates='likes')
 
