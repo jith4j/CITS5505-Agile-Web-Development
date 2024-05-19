@@ -112,6 +112,10 @@ body.dark-mode .login-container {
   background-color: var(--primary-color);
 }
 
+body.dark-mode .info-icon {
+  color: #fff;
+}
+
 .theme-toggle {
   margin-left: 20px;
 }
