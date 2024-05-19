@@ -5,12 +5,21 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 import humanize
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-login = LoginManager(app)
+db = SQLAlchemy()
+migrate = Migrate()
+login = LoginManager()
 login.login_view = 'login'
-app.jinja_env.globals['humanize'] = humanize
 
-from app import routes,models
+def create_app(config):
+    app = Flask(__name__)
+    app.config.from_object(config)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    app.jinja_env.globals['humanize'] = humanize
+
+    from app.blueprints import main
+    app.register_blueprint(main)
+
+    return app

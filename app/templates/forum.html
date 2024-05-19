@@ -5,14 +5,14 @@
     <div class="forum-wrapper">
         <div class="container">
             <div class="content-wrap">
-                <form action="{{ url_for('search') }}" method="get" style="float: right; margin-top: -50px;">
+                <form action="{{ url_for('main.search') }}" method="get" style="float: right; margin-top: -50px;">
                     <input type="text" name="query" placeholder="Search..." value="{{ query }}">
                     <button type="submit" class="btn btn-sort" style="padding: 5px 10px;">Search</button>
                 </form>
                 <h2 class="text-center text-heading">Welcome, {{ username }}!</h2>
                 <div class="contents-sec">
                     <h3 class="question-label">Ask a Question</h3>
-                    <form action="{{ url_for('forum', username=username) }}" method="post">
+                    <form action="{{ url_for('main.forum', username=username) }}" method="post">
                         <div class="form-group">
                             <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
                         </div>
@@ -25,9 +25,9 @@
                 <div class="forum-header">
                     <h3 class="text-center text-heading">Forum</h3>
                     <div class="sorting-options">
-                        <a href="{{ url_for('forum', username=username, sort='asc') }}"
+                        <a href="{{ url_for('main.forum', username=username, sort='asc') }}"
                             class="btn btn-sort{% if sort == 'asc' %} active{% endif %}">Oldest</a>
-                        <a href="{{ url_for('forum', username=username, sort='desc') }}"
+                        <a href="{{ url_for('main.forum', username=username, sort='desc') }}"
                             class="btn btn-sort{% if sort == 'desc' or sort == None %} active{% endif %}">Latest</a>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     {% for q in ques %}
                     <div class="question-cards" id="questionList">
                         <div class="question-card" data-id="{{ q.id }}">
-                            <a href="{{ url_for('answer', qid=q.id) }}">
+                            <a href="{{ url_for('main.answer', qid=q.id) }}">
                                 <div class="wrap">
                                     <div class="author-avatar">
                                         <img class="avatar" src="{{ q.author_avatar.avatar(36) }}">

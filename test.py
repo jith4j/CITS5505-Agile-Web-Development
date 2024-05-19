@@ -1,20 +1,16 @@
 import os
 import json
 import requests
-basedir = os.path.abspath(os.path.dirname(__file__))
-# os.environ['DATABASE_URL'] = 'sqlite://' + os.path.join(basedir, 'test.db')
-
-os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
 
 import unittest
-from app import app, db
+from app import db, create_app
 from app.models import User
-
-
+from config import TestConfig
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app = create_app(TestConfig)
+        self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
 

@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from urllib.parse import urlsplit
-from app import app, db
+from app import db
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
@@ -12,43 +12,44 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import humanize
+from app.blueprints import main
 
-@app.route('/')
-@app.route('/index')
+@main.route('/')
+@main.route('/index')
 def index():
     return render_template('index.html')
 
-@app.route("/success")
+@main.route("/success")
 def success():
     return render_template('success.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('forum', username=current_user.username))
+        return redirect(url_for('main.forum', username=current_user.username))
     form = LoginForm()
     if form.validate_on_submit():
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('forum', username=user.username)
+            next_page = url_for('main.forum', username=user.username)
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form)
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
-@app.route('/register', methods=['GET', 'POST'])
+@main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -56,10 +57,10 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/forgotPassword', methods=['POST'])
+@main.route('/forgotPassword', methods=['POST'])
 def forgot_password():
     data = request.get_json()
     email = data.get('email')
@@ -85,10 +86,7 @@ def forgot_password():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-@app.route('/forum/<username>', methods=['GET', 'POST'])
+@main.route('/forum/<username>', methods=['GET', 'POST'])
 @login_required
 def forum(username):
     if current_user.username != username:
@@ -106,7 +104,7 @@ def forum(username):
             question = Question(question=question_text, author=current_user)
             db.session.add(question)
             db.session.commit()
-            return redirect(url_for('forum', username=username))
+            return redirect(url_for('main.forum', username=username))
 
     ques_list = []
 
@@ -128,7 +126,7 @@ def forum(username):
 
     return render_template('forum.html', username=user.username, ques=ques_list, sort=sort_order, humanize=humanize)
 
-@app.route('/answer/<qid>', methods=['GET', 'POST'])
+@main.route('/answer/<qid>', methods=['GET', 'POST'])
 @login_required
 def answer(qid):
     ans_list = []
@@ -162,7 +160,7 @@ def answer(qid):
 
     return render_template('answer.html', ans=ans_list, question=ques, sort=sort_order, humanize=humanize)
 
-@app.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
+@main.route('/latestAnswer/<qid>', methods=['GET', 'POST'])
 @login_required
 def latestAnswer(qid):
     ans_list=[]
@@ -171,7 +169,7 @@ def latestAnswer(qid):
         ans_list=[{'answer': ans.answer}]
     return jsonify(ans_list)
 
-@app.route('/addAnswer/<qid>', methods=['GET', 'POST'])
+@main.route('/addAnswer/<qid>', methods=['GET', 'POST'])
 @login_required
 def add_answer(qid):
     question = db.session.get(Question, qid)
@@ -186,13 +184,13 @@ def add_answer(qid):
             db.session.add(answer)
             db.session.commit()
             flash('Your answer has been posted.')
-            return redirect(url_for('answer', qid=qid))
+            return redirect(url_for('main.answer', qid=qid))
 
     ans_list = db.session.scalars(sa.select(Answer).where(Answer.question_id == qid)).all()
     return render_template('answer.html', ans_list=ans_list, question=question)
 
 
-@app.route("/profile")
+@main.route("/profile")
 @login_required
 def profile():
     curruser = current_user
@@ -200,7 +198,7 @@ def profile():
     ans_list = db.session.scalars(curruser.answer_posts.select()).all()
     return render_template('profile.html', user=curruser, ques=ques_list, ans= ans_list)
 
-@app.route('/addReply/<int:aid>', methods=['POST'])
+@main.route('/addReply/<int:aid>', methods=['POST'])
 @login_required
 def add_reply(aid):
     reply_text = request.form.get('reply')
@@ -211,10 +209,10 @@ def add_reply(aid):
             db.session.add(reply)
             db.session.commit()
             flash('Reply added!')
-    return redirect(url_for('answer', qid=answer.question_id))
+    return redirect(url_for('main.answer', qid=answer.question_id))
 
 
-@app.route('/toggle_like/<int:aid>', methods=['POST'])
+@main.route('/toggle_like/<int:aid>', methods=['POST'])
 @login_required
 def toggle_like(aid):
     answer = db.session.get(Answer, aid)
@@ -236,13 +234,13 @@ def toggle_like(aid):
     return jsonify({'liked': liked, 'likes': likes_count})
 
 
-@app.route('/search')
+@main.route('/search')
 @login_required
 def search():
     query = request.args.get('query')
     if not query:
         flash('Please enter a search term.', 'warning')
-        return redirect(url_for('forum', username=current_user.username))
+        return redirect(url_for('main.forum', username=current_user.username))
 
     questions = db.session.scalars(sa.select(Question).where(Question.question.ilike(f'%{query}%'))).all()
     answers = db.session.scalars(sa.select(Answer).where(Answer.answer.ilike(f'%{query}%'))).all()

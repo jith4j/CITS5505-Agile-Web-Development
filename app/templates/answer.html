@@ -30,13 +30,13 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="sortDropdown">
                         <a class="dropdown-item{% if sort == 'most_liked' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='most_liked') }}">Most Liked</a>
                         <a class="dropdown-item{% if sort == 'least_liked' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='least_liked') }}">Least Liked</a>
                         <a class="dropdown-item{% if sort == 'newest' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='newest') }}">Newest</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='newest') }}">Newest</a>
                         <a class="dropdown-item{% if sort == 'oldest' %} active{% endif %}"
-                            href="{{ url_for('answer', qid=question.id, sort='oldest') }}">Oldest</a>
+                            href="{{ url_for('main.answer', qid=question.id, sort='oldest') }}">Oldest</a>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                 {% endif %}
                 <button class="btn-reply btn" onclick="toggleReplyForm({{ a.id }})">Reply</button>
                 <div id="reply-form-{{ a.id }}" class="reply-form">
-                    <form action="{{ url_for('add_reply', aid=a.id) }}" method="POST">
+                    <form action="{{ url_for('main.add_reply', aid=a.id) }}" method="POST">
                         <textarea name="reply" placeholder="Reply to this answer..." required></textarea>
                         <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
                         <button type="button" class="btn btn-danger btn-sm"
@@ -100,7 +100,7 @@
 
         <div class="mt-4">
             <h4>Add Your Answer</h4>
-            <form action="{{ url_for('add_answer', qid=question.id) }}" method="POST">
+            <form action="{{ url_for('main.add_answer', qid=question.id) }}" method="POST">
                 <div class="form-group">
                     <label for="answer">Your Answer</label>
                     <textarea class="form-control" id="answer" name="answer" rows="3" required></textarea>
