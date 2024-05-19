@@ -40,9 +40,7 @@ class SeleniumTests(TestCase):
         self.app_context.pop()
 
     def test_example(self):
-        # creating an empty browser
-        # with logged in user added
-        pass
+        self.driver.get(localHost)
 
 if __name__ == '__main__':
     unittest.main()
