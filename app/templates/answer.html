@@ -67,19 +67,17 @@
 
                 <!-- Existing replies -->
                 {% if a.all_replies %}
-                <div class="reply-cards">
-                    {% for reply in a.all_replies %}
-                    <div class="reply-card">
-                        <div class="wrap">
-                            <div class="author-avatar">
-                                <img class="avatar" src="{{ reply.author.avatar(36) }}">
-                                <p class="author"><strong>{{ reply.author.username }}</strong></p>
+                <div class="replies">
+                    <ul>
+                        {% for reply in a.all_replies %}
+                        <li>
+                            <div class="reply-info">
+                                <span>@{{ reply.author.username }}</span> <span class="timestamp">{{ humanize.naturaltime(reply.timestamp) }}</span>
                             </div>
-                            <p class="timestamp">{{ humanize.naturaltime(reply.timestamp) }}</p>
-                        </div>
-                        <p class="reply-body">{{ reply.reply }}</p>
-                    </div>
-                    {% endfor %}
+                            <div class="reply-body">{{ reply.reply }}</div>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
                 <button class="btn-reply btn" onclick="toggleReplyForm({{ a.id }})">Reply</button>
@@ -87,8 +85,7 @@
                     <form action="{{ url_for('main.add_reply', aid=a.id) }}" method="POST">
                         <textarea name="reply" placeholder="Reply to this answer..." required></textarea>
                         <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
-                        <button type="button" class="btn btn-danger btn-sm"
-                            onclick="toggleReplyForm({{ a.id }})">Cancel</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="toggleReplyForm({{ a.id }})">Cancel</button>
                     </form>
                 </div>
             </div>
