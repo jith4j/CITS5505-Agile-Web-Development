@@ -695,3 +695,36 @@ hr {
     width: 500px;
   }
 }
+
+.reply-info {
+  color: #333;
+}
+
+.reply-info .username {
+  display: inline-block;
+  width: auto;
+  font-weight: normal; 
+}
+
+.reply-info .timestamp {
+  display: inline-block;
+  margin-left: 35px; 
+  color: #888;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.replies ul {
+  list-style: none;
+  padding: 0;
+}
+
+.replies li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.reply-body {
+  margin-left: 20px;
+  color: #666;
+}
