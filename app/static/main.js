@@ -21,11 +21,11 @@ function get_answers(qid, container) {
 
 // answer.html
 function toggleReplyForm(answerId) {
-  var form = document.getElementById("reply-form-" + answerId);
-  if (form.style.display === "none" || form.style.display === "") {
-    form.style.display = "block";
+  var form = document.getElementById('reply-form-' + answerId);
+  if (form.style.display === 'block') {
+      form.style.display = 'none';
   } else {
-    form.style.display = "none";
+      form.style.display = 'block';
   }
 }
 
