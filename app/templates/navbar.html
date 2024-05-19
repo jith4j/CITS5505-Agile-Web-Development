@@ -21,8 +21,14 @@
     <header>
         <nav class="nav-bar">
             <div class="heading">
-                <a href="{{ url_for('index') }}"><img src="../static/assets/logo.png" alt="" class="logo1"></a>
-                <a href="{{ url_for('index') }}"><img src="../static/assets/logo-word.png" alt="" class="logo2"></a>
+                <a href="{{ url_for('index') }}">
+                    <img src="../static/assets/logo.png" alt="" class="logo1 light-logo">
+                    <img src="../static/assets/logo-dark.png" alt="" class="logo1 dark-logo">
+                </a>
+                <a href="{{ url_for('index') }}">
+                    <img src="../static/assets/logo-word.png" alt="" class="logo2 light-logo">
+                    <img src="../static/assets/logo-word-dark.png" alt="" class="logo2 dark-logo">
+                </a>
             </div>
             <div class="nav-options">
                 <div class="theme-toggle">

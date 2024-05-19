@@ -62,6 +62,18 @@ body.dark-mode {
   display: none;
 }
 
+.dark-logo {
+  display: none;
+}
+
+body.dark-mode .light-logo {
+  display: none;
+}
+
+body.dark-mode .dark-logo {
+  display: inline-block;
+}
+
 /* Dark Mode */
 body.dark-mode {
   background-color: var(--secondary-color);
@@ -292,6 +304,14 @@ a {
 }
 
 /* forum.html */
+.search {
+  float: right;
+  margin-top: -50px;
+  position: absolute;
+  right: 21rem;
+  top: 13rem;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;

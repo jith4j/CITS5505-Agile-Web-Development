@@ -5,10 +5,12 @@
     <div class="forum-wrapper">
         <div class="container">
             <div class="content-wrap">
-                <form action="{{ url_for('search') }}" method="get" style="float: right; margin-top: -50px;">
-                    <input type="text" name="query" placeholder="Search..." value="{{ query }}">
-                    <button type="submit" class="btn btn-sort" style="padding: 5px 10px;">Search</button>
-                </form>
+                <div class="search">
+                    <form action="{{ url_for('search') }}" method="get" style="float: right; margin-top: -50px;">
+                        <input type="text" name="query" placeholder="Search..." value="{{ query }}">
+                        <button type="submit" class="btn btn-sort" style="padding: 5px 10px;">Search</button>
+                    </form>
+                </div>
                 <h2 class="text-center text-heading">Welcome, {{ username }}!</h2>
                 <div class="contents-sec">
                     <h3 class="question-label">Ask a Question</h3>
