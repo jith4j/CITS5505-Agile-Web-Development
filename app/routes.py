@@ -266,3 +266,26 @@ def search():
 
     return render_template('forum.html', username=current_user.username, ques=ques_list, sort='desc', query=query, humanize=humanize)
 
+@main.route('/uQuestions/<int:uid>', methods=['GET', 'POST'])
+@login_required
+def uQuestions(uid):
+    ques_list=[]
+    ques=db.session.scalars(sa.select(Question).where(Question.user_id==uid).order_by(Question.timestamp.desc())).all()
+    if ques:
+        for q in ques:
+            ques_list.append({'question': q.question,
+                              'time': humanize.naturaltime(q.timestamp)
+                              })
+    return jsonify(ques_list)
+
+@main.route('/uAnswers/<int:uid>', methods=['GET', 'POST'])
+@login_required
+def uAnswers(uid):
+    ans_list=[]
+    ans=db.session.scalars(sa.select(Answer).where(Answer.user_id==uid).order_by(Answer.timestamp.desc())).all()
+    if ans:
+        for a in ans:
+            ans_list.append({'answer': a.answer,
+                              'time': humanize.naturaltime(a.timestamp)
+                              })
+    return jsonify(ans_list)
