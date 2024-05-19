@@ -53,3 +53,71 @@ function toggleLike(answerId) {
       console.error("Error:", error);
     });
 }
+
+$(document).ready(function() {
+  $('#ques_ans_list').on('click', '.tab', function() {
+      var uid = $(this).data('id')
+      $('.tab').removeClass('active'); // Remove 'active' class from all tabs
+      $(this).addClass('active'); // Add 'active' class to clicked tab
+      var type = $(this).data('tab'); // Get data type (questions or answers)
+      var container = $('#content'); 
+      container.empty();
+      if (type === 'questions') {
+          get_u_questions(uid, container);
+      } else {
+          get_u_answers(uid, container);
+      }
+  });
+});
+
+function get_u_questions(uid, container) {
+  $.ajax({
+      url: '/uQuestions/' + uid,
+      type: 'GET',
+      success: function(data) {
+          if (data.length > 0) {
+              var allQuestions = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.question}</li>`).join('');
+              container.html(allQuestions);
+          } else {
+              container.html('<p>No questions found.</p>');
+          }
+      },
+      error: function() {
+          container.html('<p>Error retrieving questions. Please try again.</p>');
+      }
+  });
+}
+
+function get_u_answers(uid, container) {
+  $.ajax({
+      url: '/uAnswers/' + uid,
+      type: 'GET',
+      success: function(data) {
+          if (data.length > 0) {
+              var allAnswers = data.map(a => `<li><strong style="color: grey;">${a.time}:</strong> ${a.answer}</li>`).join('');
+              container.html(allAnswers);
+          } else {
+              container.html('<p>No answers found.</p>');
+          }
+      },
+      error: function() {
+          container.html('<p>Error retrieving answers. Please try again.</p>');
+      }
+  });
+}
+
+$(document).ready(function () {
+  $('#questionList').on('mouseenter', '.question-card', function () {
+      console.log("Hovered over question card with ID:", $(this).data('id'));
+      var qid = $(this).data('id');
+      var container = $('#' + String(qid).trim()); // Access the container by dynamically created ID
+      if (container.is(':empty')) {
+          console.log("Container is empty, fetching answers...");
+          get_answers(qid, container);
+      }
+  }).on('mouseleave', '.question-card', function () {
+      var qid = $(this).data('id');
+      $('#' + String(qid).trim()).empty(); // Clear the content
+      console.log("Cleared answers on mouse leave...");
+  });
+});

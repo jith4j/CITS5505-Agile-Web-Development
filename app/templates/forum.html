@@ -59,22 +59,4 @@
     </div>
 </main>
 
-<script>
-    $(document).ready(function () {
-        $('#questionList').on('mouseenter', '.question-card', function () {
-            console.log("Hovered over question card with ID:", $(this).data('id'));
-            var qid = $(this).data('id');
-            var container = $('#' + String(qid).trim()); // Access the container by dynamically created ID
-            if (container.is(':empty')) {
-                console.log("Container is empty, fetching answers...");
-                get_answers(qid, container);
-            }
-        }).on('mouseleave', '.question-card', function () {
-            var qid = $(this).data('id');
-            $('#' + String(qid).trim()).empty(); // Clear the content
-            console.log("Cleared answers on mouse leave...");
-        });
-    });
-
-</script>
 {% endblock %}
