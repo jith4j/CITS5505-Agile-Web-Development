@@ -160,6 +160,13 @@ body.dark-mode .theme-toggle-label .ball {
   transform: translateX(26px);
 }
 
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode p {
+  color: var(--text-color);
+}
+
 body {
   margin: 0px !important;
   font-family: "Montserrat", sans-serif;
@@ -306,10 +313,7 @@ a {
 /* forum.html */
 .search {
   float: right;
-  margin-top: -50px;
-  position: absolute;
-  right: 21rem;
-  top: 13rem;
+  margin-top: 1.15rem;
 }
 
 .container {
