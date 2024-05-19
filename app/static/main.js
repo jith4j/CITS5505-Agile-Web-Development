@@ -53,3 +53,27 @@ function toggleLike(answerId) {
       console.error("Error:", error);
     });
 }
+
+// Dark mode
+// Dark Mode Toggle
+const themeToggleButton = document.getElementById("theme-toggle-button");
+
+// Function to apply the theme based on the stored value
+function applyTheme() {
+  const storedTheme = localStorage.getItem("theme");
+  if (storedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+  } else {
+    document.body.classList.remove("dark-mode");
+  }
+}
+
+// Event listener for theme toggle button click
+themeToggleButton.addEventListener("click", function () {
+  document.body.classList.toggle("dark-mode");
+  const isDarkMode = document.body.classList.contains("dark-mode");
+  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+});
+
+// Apply the theme on page load
+document.addEventListener("DOMContentLoaded", applyTheme);

@@ -1,3 +1,153 @@
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #f8f9fa;
+  --text-color: #333333;
+}
+
+body.dark-mode {
+  --primary-color: #333333;
+  --secondary-color: #222222;
+  --text-color: #ffffff;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  margin-left: 20px;
+}
+
+.theme-toggle-label {
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  background-color: #ccc;
+  border-radius: 34px;
+  position: relative;
+  cursor: pointer;
+}
+
+.theme-toggle-label .fas {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-label .fa-sun {
+  left: 8px;
+  color: #fff;
+}
+
+.theme-toggle-label .fa-moon {
+  right: 8px;
+  color: #fff;
+}
+
+.theme-toggle-label .ball {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #fff;
+  top: 4px;
+  left: 4px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-checkbox:checked + .theme-toggle-label .ball {
+  transform: translateX(26px);
+}
+
+.theme-toggle-checkbox {
+  display: none;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+body.dark-mode .nav-bar {
+  background-color: var(--primary-color);
+}
+
+body.dark-mode .nav-options a {
+  color: var(--text-color);
+}
+
+body.dark-mode .welcome-container {
+  background-color: var(--primary-color);
+}
+
+body.dark-mode .content-wrap {
+  background-color: var(--primary-color);
+}
+
+body.dark-mode .question-card {
+  background-color: var(--secondary-color);
+}
+
+body.dark-mode .answer-card {
+  background-color: var(--secondary-color);
+}
+
+body.dark-mode .reply-card {
+  background-color: var(--primary-color);
+}
+
+body.dark-mode .login-container {
+  background-color: var(--primary-color);
+}
+
+.theme-toggle {
+  margin-left: 20px;
+}
+
+.theme-toggle-label {
+  display: inline-block;
+  width: 55px;
+  height: 34px;
+  background-color: #ccc;
+  border-radius: 34px;
+  position: relative;
+  cursor: pointer;
+}
+
+.theme-toggle-label .fas {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-label .fa-sun {
+  left: 8px;
+  color: red;
+}
+
+.theme-toggle-label .fa-moon {
+  right: 8px;
+  color: #000;
+}
+
+.theme-toggle-label .ball {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #ffffff00;
+  border: 1px solid black;
+  top: 4px;
+  left: 1px;
+  transition: transform 0.3s ease;
+}
+
+body.dark-mode .theme-toggle-label .ball {
+  transform: translateX(26px);
+}
+
 body {
   margin: 0px !important;
   font-family: "Montserrat", sans-serif;
