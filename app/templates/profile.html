@@ -16,22 +16,68 @@
         </section>
         <!-- https://codepen.io/Lewitje/pen/doJRBX/ -->
         <div class="profile-body">
-            <ul class="profile-tabs">
-                <li class="active">My Questions</li>
-                <li>My Answers</li>
+            <ul class="profile-tabs" id="ques_ans_list">
+                <li data-tab="questions" class="tab" data-id="{{ user.id }}">My Questions</li>
+                <li data-tab="answers" class="tab" data-id="{{ user.id }}">My Answers</li>
             </ul>
-            <ul class="profile-tabs-content">
-                <div>
-                    {% for q in ques %}
-                    <p>{{ q.question }}</p>
-                    {% endfor %}
-                </div>
-                <div>
-                    {% for a in ans %}
-                    <p>{{ a.answer }}</p>
-                    {% endfor %}
-                </div>
-            </ul>
+            <div class="profile-tabs-content" id="content">
+                <p>Questions/Answers</p>
+            </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#ques_ans_list').on('click', '.tab', function() {
+                var uid = $(this).data('id')
+                $('.tab').removeClass('active'); // Remove 'active' class from all tabs
+                $(this).addClass('active'); // Add 'active' class to clicked tab
+                var type = $(this).data('tab'); // Get data type (questions or answers)
+                var container = $('#content'); 
+                container.empty();
+                if (type === 'questions') {
+                    get_questions(uid, container);
+                } else {
+                    get_answers(uid, container);
+                }
+            });
+        });
+    
+        function get_questions(uid, container) {
+            $.ajax({
+                url: '/uQuestions/' + uid,
+                type: 'GET',
+                success: function(data) {
+                    if (data.length > 0) {
+                        var allQuestions = data.map(a => `<li><strong>${a.time}:</strong> ${a.question}</li>`).join('');
+                        container.html(allQuestions);
+                    } else {
+                        container.html('<p>No questions found.</p>');
+                    }
+                },
+                error: function() {
+                    container.html('<p>Error retrieving questions. Please try again.</p>');
+                }
+            });
+        }
+    
+        function get_answers(uid, container) {
+            $.ajax({
+                url: '/uAnswers/' + uid,
+                type: 'GET',
+                success: function(data) {
+                    if (data.length > 0) {
+                        var allAnswers = data.map(a => `<li><strong>${a.time}:</strong> ${a.answer}</li>`).join('');
+                        container.html(allAnswers);
+                    } else {
+                        container.html('<p>No answers found.</p>');
+                    }
+                },
+                error: function() {
+                    container.html('<p>Error retrieving answers. Please try again.</p>');
+                }
+            });
+        }
+    </script>
+    
     {% endblock %}>

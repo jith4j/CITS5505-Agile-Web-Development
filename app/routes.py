@@ -222,3 +222,27 @@ def toggle_like(aid):
 
     likes_count = db.session.scalar(sa.select(sa.func.count(Like.id)).where(Like.answer_id == aid))
     return jsonify({'liked': liked, 'likes': likes_count})
+
+@app.route('/uQuestions/<int:uid>', methods=['GET', 'POST'])
+@login_required
+def uQuestions(uid):
+    ques_list=[]
+    ques=db.session.scalars(sa.select(Question).where(Question.user_id==uid).order_by(Question.timestamp.desc())).all()
+    if ques:
+        for q in ques:
+            ques_list.append({'question': q.question,
+                              'time': humanize.naturaltime(q.timestamp)
+                              })
+    return jsonify(ques_list)
+
+@app.route('/uAnswers/<int:uid>', methods=['GET', 'POST'])
+@login_required
+def uAnswers(uid):
+    ans_list=[]
+    ans=db.session.scalars(sa.select(Answer).where(Answer.user_id==uid).order_by(Answer.timestamp.desc())).all()
+    if ans:
+        for a in ans:
+            ans_list.append({'answer': a.answer,
+                              'time': humanize.naturaltime(a.timestamp)
+                              })
+    return jsonify(ans_list)
