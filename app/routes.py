@@ -86,9 +86,6 @@ def forgot_password():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @main.route('/forum/<username>', methods=['GET', 'POST'])
 @login_required
 def forum(username):
